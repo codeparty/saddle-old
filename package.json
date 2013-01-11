@@ -5,13 +5,12 @@
     "type": "git",
     "url": "git://github.com/codeparty/saddle.git"
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "./lib/index.js",
   "browserify": {
     "main": "./lib/browser.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "mocha": ">=1.8.1",
     "expect.js": ">=0.2.0"
