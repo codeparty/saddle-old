@@ -1,0 +1,23 @@
+{
+  "name": "saddle",
+  "description": "DOM bindings for Derby",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/codeparty/saddle.git"
+  },
+  "version": "0.0.0",
+  "main": "./lib/index.js",
+  "browserify": {
+    "main": "./lib/browser.js"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "mocha": ">=1.8.1",
+    "expect.js": ">=0.2.0"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "optionalDependencies": {}
+}
