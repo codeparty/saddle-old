@@ -6,9 +6,9 @@ describe 'Dom', ->
     it 'should set HTML', ->
       dom = new Dom
       body = document.body
+      $body = $ body
 
       dom.setHtml body, '<div>123</div>'
 
-      expect(body.innerHTML).to.be '<div>123</div>'
-      # textContent for firefox
-      expect(body.innerText || body.textContent).to.be '123'
+      expect($body.html()).to.be '<div>123</div>'
+      expect($body.text()).to.be '123'

@@ -10,6 +10,7 @@ basePath = '.';
 files = [
   MOCHA,
   MOCHA_ADAPTER,
+  'test/assets/jquery-1.9.0.js',
 
   'test/build/browserified.js'
 ];
