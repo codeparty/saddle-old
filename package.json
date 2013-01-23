@@ -12,8 +12,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "mocha": ">=1.8.1",
-    "expect.js": ">=0.2.0"
+    "grunt": "~0.3.17",
+    "grunt-testacular": "~0.2.2"
   },
   "engines": {
     "node": ">=0.8.0"
