@@ -1,7 +1,5 @@
 expect = require 'expect.js'
-Dom = require '../../lib'
-
-debugger
+Dom = require '../lib'
 
 describe 'Dom', ->
   describe '#setHtml()', ->
@@ -12,4 +10,5 @@ describe 'Dom', ->
       dom.setHtml body, '<div>123</div>'
 
       expect(body.innerHTML).to.be '<div>123</div>'
-      expect(body.innerText).to.be '123'
+      # textContent for firefox
+      expect(body.innerText || body.textContent).to.be '123'
