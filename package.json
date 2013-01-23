@@ -13,7 +13,9 @@
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.3.17",
-    "grunt-testacular": "~0.2.2"
+    "grunt-browserify": "~0.1.2",
+    "grunt-testacular": "~0.2.2",
+    "expect.js": "~0.2.0"
   },
   "engines": {
     "node": ">=0.8.0"

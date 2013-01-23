@@ -16,3 +16,6 @@ node_modules
 
 # WebStorm
 .idea
+
+# browserify for client testing
+test/client/build/

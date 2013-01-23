@@ -3,19 +3,21 @@
 
 
 // base path, that will be used to resolve files and exclude
-basePath = '../../../../../..';
+basePath = '.';
 
 
 // list of files / patterns to load in the browser
 files = [
   MOCHA,
-  MOCHA_ADAPTER
+  MOCHA_ADAPTER,
+
+  'test/client.browserified.js'
 ];
 
 
 // list of files to exclude
 exclude = [
-  
+
 ];
 
 
