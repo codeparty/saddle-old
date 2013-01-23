@@ -19,18 +19,18 @@ module.exports = function (grunt) {
     },
 
     browserify: {
-      'test/client/build/browserified.js': {
-        entries: ['test/client/*.coffee']
+      'test/build/browserified.js': {
+        entries: ['test/*.coffee']
       }
     },
 
     watch: {
       browserify: {
-        files: ['lib/*.js', 'test/client/*.coffee'],
+        files: ['lib/*.js', 'test/*.coffee'],
         tasks: 'browserify'
       },
       test: {
-        files: 'test/client/build/browserified.js',
+        files: 'test/build/browserified.js',
         tasks: 'testacularServer'
       }
     }

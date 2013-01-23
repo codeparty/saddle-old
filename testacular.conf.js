@@ -11,7 +11,7 @@ files = [
   MOCHA,
   MOCHA_ADAPTER,
 
-  'test/client.browserified.js'
+  'test/build/browserified.js'
 ];
 
 
@@ -55,7 +55,7 @@ autoWatch = true;
 // - Safari (only Mac)
 // - PhantomJS
 // - IE (only Windows)
-browsers = ['Chrome'];
+browsers = ['Chrome', 'Firefox', 'Opera', 'Safari'];
 
 
 // If browser does not capture in given timeout [ms], kill it

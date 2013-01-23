@@ -18,4 +18,4 @@ node_modules
 .idea
 
 # browserify for client testing
-test/client/build/
+test/build/
