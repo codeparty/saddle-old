@@ -19,6 +19,9 @@ internal API are not listed
   * `$forChildren(e, el, next, dom)`: trigger event for element's children
   * `$forName(e, el, next, dom)`: trigger event for elements with the same name
 
+* `uid()`: get an unique id
+* `getRangeMarker()`: returns comment or script tag depending on what browser we are dealing with
+
 # Testing
 
 You need to install grunt globally:
