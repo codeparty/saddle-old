@@ -3,10 +3,17 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-testacular');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-bg-shell');
 
 
   // Project configuration.
   grunt.initConfig({
+
+    bgShell: {
+      watchCoffee: {
+        cmd: './node_modules/coffee-script/bin/coffee -bw -o ./lib -c ./src'
+      }
+    },
 
     testacularServer: {
       client: {
@@ -37,6 +44,7 @@ module.exports = function (grunt) {
 
   });
 
+  grunt.registerTask('default', 'bgShell:watchCoffee');
 
   grunt.registerTask('test', 'browserify testacularServer watch:browserify watch:test');
 

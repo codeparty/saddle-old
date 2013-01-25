@@ -12,9 +12,11 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "coffee-script": ">=1.4.0",
     "grunt": "~0.3.17",
     "grunt-browserify": "~0.1.2",
     "grunt-testacular": "~0.2.2",
+    "grunt-bg-shell": "1.x.x",
     "expect.js": "~0.2.0"
   },
   "engines": {
