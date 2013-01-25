@@ -3,7 +3,7 @@ ItemRange = require './ItemRange'
 
 
 class Saddle
-  constructor: (options)->
+  constructor: (options = {})->
     # TODO: figure out better config sharing
     @prefix = ItemRange.prefix = options.prefix || '$'
     @useTags = ItemRange.useTags = !!options.useTags
@@ -13,7 +13,7 @@ class Saddle
   clear: ->
     ItemRange.clear()
 
-  uid: ()-> @prefix + @_id++
+  uid: ()-> @prefix + (@_id++).toString(36)
 
   getMarkerTpl = ->
     if @useTags
@@ -24,7 +24,7 @@ class Saddle
 for own methodName of (Item::)
   Saddle::[methodName] = do (methodName = methodName)->
     (id, arg1, arg2, arg3)->
-      new Item(id)[methodName](arg1, arg2, arg3)
+      Item.get(id)[methodName](arg1, arg2, arg3)
 
 
 module.exports = Saddle

@@ -35,10 +35,10 @@ class Item
 
 
   getHtml: ->
-    @el.innerHtml
+    @el.innerHTML
 
   setHtml: (html)->
-    @el.innerHtml = html
+    @el.innerHTML = html
     return
 
 

@@ -37,7 +37,7 @@ class ItemRange
 
 
   getHtml: ->
-    @range.innerHtml
+    @range.innerHTML
 
   setHtml: (html)->
     range = @range
