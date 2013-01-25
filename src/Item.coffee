@@ -24,7 +24,7 @@ class Item
 
   setAttr: (name, val)->
     @el.setAttribute name, val
-    @
+    return
 
 
   getProp: (name)->
@@ -32,7 +32,7 @@ class Item
 
   setProp: (name, val)->
     @el[name] = val
-    @
+    return
 
 
   getHtml: ->
@@ -40,27 +40,28 @@ class Item
 
   setHtml: (html)->
     @el.innerHtml = html
-    @
+    return
 
 
   append: (html)->
     @el.insertAdjacentHTML 'beforeend', html
-    @
+    return
 
   insert: (html, index)->
     @el.childNodes[index].insertAdjacentHTML 'beforebegin', html
-    @
+    return
 
   remove: (index)->
     el = @el
     el.removeChild el.childNodes[index]
-    @
+    return
 
   move: (from, to, howMany = 1)->
     el = @el
     child = @el.childNodes[from]
     before = @el.childNodes[to]
 
+    #TODO: check this
     if howMany is 1
       el.insertBefore(child, before);
     else
@@ -68,7 +69,5 @@ class Item
       while howMany--
         frag.appendChild child
         child = child.nextSibling()
-      el.insertBefore(frag, before);
-    @
-
-
+      el.insertBefore(frag, before)
+    return
