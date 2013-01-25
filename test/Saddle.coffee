@@ -11,11 +11,8 @@ beforeEach ->
     <div id=$1><p>1</p></div>
     <div id=$2 class=test>
     <p>2-1</p>
-    <p>2-2</p>
-    <p>2-3</p>
-    <p>2-4</p>
     <!--$$0-->
-    <p>2-5</p>
+    <p>2-2</p>
     </div>
     <div id=$3 class=test>
     <p>3-1</p>
@@ -98,7 +95,7 @@ describe 'Saddle', ->
     it 'should set HTML for crooked range', ->
       saddle.setHtml '$0', 'test'
       $2 = $ document.getElementById '$2'
-      expect($2.html().replace /\s+/g, '').to.be '<!--$$0--><p>2-5</p>'
+      expect($2.html().replace /\s+/g, '').to.be '<!--$$0--><p>2-2</p>'
       expect(document.getElementById '$1').to.be null
 
     it 'should set HTML for normal range', ->
@@ -109,5 +106,26 @@ describe 'Saddle', ->
       saddle.setHtml '$4', ''
       $3 = $ document.getElementById '$3'
       expect($3.html().replace /\s+/g, '').to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
+
+
+  describe '#append()', ->
+    it 'should append html to div', ->
+      $1 = $ document.getElementById '$1'
+
+      saddle.append '$1', '<p>2</p>'
+      expect($1.html()).to.be '<p>1</p><p>2</p>'
+
+      saddle.append '$1', '<p>3</p>'
+      expect($1.html()).to.be '<p>1</p><p>2</p><p>3</p>'
+
+
+    it 'should append html to crooked renge', ->
+      $2 = $ document.getElementById '$2'
+
+      saddle.append '$0', '<p>0-1</p>'
+      expect($2.html().replace /\s+/g, '').to.be '<p>2-1</p><p>0-1</p><!--$$0--><p>2-2</p>'
+
+      saddle.append '$0', '<p>0-2</p>'
+      expect($2.html().replace /\s+/g, '').to.be '<p>2-1</p><p>0-1</p><p>0-2</p><!--$$0--><p>2-2</p>'
 
 

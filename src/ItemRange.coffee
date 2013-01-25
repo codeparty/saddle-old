@@ -45,9 +45,9 @@ class ItemRange
     # TODO: check for simple insertBefore range.end
     range = @range
     endContainer = range.endContainer
-    nodeAfterRange = endContainer.childNodes[range.endOffset]
+    console.log closingMarker = endContainer.childNodes[range.endOffset]
     #TODO: check. Might not work if there no nodes after
-    nodeAfterRange.insertAdjacentHTML 'beforebegin', html
+    endContainer.insertBefore range.createContextualFragment(html), closingMarker
     return
 
   insert: (html, index)->
