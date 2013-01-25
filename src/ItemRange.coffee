@@ -5,16 +5,14 @@ class ItemRange
   #private static properties
   doc = document
   createRange = -> doc.createRange()
-  createContextualFragment = (html)-> doc.createContextualFragment(html)
 
   commentsMap = {}
 
   #static method
   @get: (id)->
-    if item = commentsMap[id]
-      unless doc.contains item
-        return
-      return item
+    # TODO: DRY
+    if (comment = commentsMap[id]) and doc.contains comment
+      return new ItemRange comment, id
 
     commentsMap = {}
     # NodeFilter.SHOW_COMMENT == 128
@@ -36,13 +34,10 @@ class ItemRange
     range.setEndBefore(end)
 
 
-  getHtml: ->
-    @range.innerHTML
-
   setHtml: (html)->
     range = @range
     range.deleteContents()
-    range.insertNode createContextualFragment html
+    range.insertNode range.createContextualFragment(html)
     return
 
 

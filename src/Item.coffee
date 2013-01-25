@@ -7,13 +7,19 @@ class Item
   itemsMap = {}
 
   @get: (id)->
-    if item = itemsMap[id]
+    #TODO: figure out the same prop name
+    if (item = itemsMap[id]) and doc.contains item.el || item.range
       return item
 
     itemsMap[id] = if (el = doc.getElementById(id))
       new Item el
     else
       ItemRange.get id
+
+  @clear: ->
+    itemsMap = {}
+    return
+
 
   constructor: (@el)->
 

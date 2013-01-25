@@ -11,6 +11,7 @@ class Saddle
     @_id = 0
 
   clear: ->
+    Item.clear()
     ItemRange.clear()
 
   uid: ()-> @prefix + (@_id++).toString(36)
@@ -24,7 +25,7 @@ class Saddle
 for own methodName of (Item::)
   Saddle::[methodName] = do (methodName = methodName)->
     (id, arg1, arg2, arg3)->
-      Item.get(id)[methodName](arg1, arg2, arg3)
+      Item.get(id)?[methodName](arg1, arg2, arg3)
 
 
 module.exports = Saddle
