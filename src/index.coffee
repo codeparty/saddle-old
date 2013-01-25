@@ -6,11 +6,18 @@ module.exports = Saddle
 class Saddle
   constructor: (options)->
     # TODO: figure out better config sharing
-    ItemRange.prefix = options.prefix || '$'
-    ItemRange.useTags = !!options.useTags
+    @prefix = ItemRange.prefix = options.prefix || '$'
+    @useTags = ItemRange.useTags = !!options.useTags
 
     @_id = 0
 
+  uid: ()-> @prefix + @_id++
+
+  getMarkerTpl = ->
+    if @useTags
+      (id)-> "<comment id=#{id}></comment>"
+    else
+      (id)-> "<!-- #{id} -->"
 
 for own methodName of (Item::)
   Saddle::[methodName] = do (methodName = methodName)->
