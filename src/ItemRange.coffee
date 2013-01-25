@@ -27,6 +27,8 @@ class ItemRange
     if comment = commentsMap[id]
       new ItemRange comment, id
 
+  @clear: ->
+    commentsMap = {}
 
   constructor: (start, id)->
     end = commentsMap[ItemRange.prefix + id]

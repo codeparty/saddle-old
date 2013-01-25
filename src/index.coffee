@@ -11,6 +11,9 @@ class Saddle
 
     @_id = 0
 
+  clear: ->
+    ItemRange.clear()
+
   uid: ()-> @prefix + @_id++
 
   getMarkerTpl = ->
