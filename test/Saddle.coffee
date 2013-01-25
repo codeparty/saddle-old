@@ -91,6 +91,10 @@ describe 'Saddle', ->
       $1 = $ document.getElementById '$1'
       expect($1.html()).to.be '<div>123</div>'
 
+      saddle.setHtml '$1', '<b>321</b>'
+      $1 = $ document.getElementById '$1'
+      expect($1.html()).to.be '<b>321</b>'
+
     it 'should set HTML for crooked range', ->
       saddle.setHtml '$0', 'test'
       $2 = $ document.getElementById '$2'
@@ -101,5 +105,9 @@ describe 'Saddle', ->
       saddle.setHtml '$4', 'test<i></i>'
       $3 = $ document.getElementById '$3'
       expect($3.html().replace /\s+/g, '').to.be '<p>3-1</p><p>3-2</p><!--$4-->test<i></i><!--$$4-->'
+
+      saddle.setHtml '$4', ''
+      $3 = $ document.getElementById '$3'
+      expect($3.html().replace /\s+/g, '').to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
 
 
