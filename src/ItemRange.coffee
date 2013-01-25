@@ -26,11 +26,11 @@ class ItemRange
   @clear: ->
     commentsMap = {}
 
-  constructor: (start, id)->
+  constructor: (@el, id)->
     end = commentsMap[ItemRange.prefix + id]
 
     @range = range = createRange()
-    range.setStartAfter(start)
+    range.setStartAfter(el)
     range.setEndBefore(end)
 
 

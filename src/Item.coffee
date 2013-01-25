@@ -8,7 +8,8 @@ class Item
 
   @get: (id)->
     #TODO: figure out the same prop name
-    if (item = itemsMap[id]) and doc.contains item.el || item.range
+    # making sure that doc has el or marker for range
+    if (item = itemsMap[id]) and doc.contains item.el
       return item
 
     itemsMap[id] = if (el = doc.getElementById(id))
