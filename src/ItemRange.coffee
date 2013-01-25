@@ -1,5 +1,3 @@
-module.exports = ItemRange
-
 class ItemRange
 #static properties
   @prefix = '$'
@@ -90,3 +88,6 @@ class ItemRange
         child = child.nextSibling()
       startContainer.insertBefore(frag, before);
     return
+
+
+module.exports = ItemRange

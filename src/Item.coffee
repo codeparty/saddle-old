@@ -1,6 +1,5 @@
 ItemRange = require './ItemRange'
 
-module.exports = Item
 
 class Item
   doc = document
@@ -71,3 +70,6 @@ class Item
         child = child.nextSibling()
       el.insertBefore(frag, before)
     return
+
+
+module.exports = Item

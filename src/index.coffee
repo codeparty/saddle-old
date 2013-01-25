@@ -1,7 +1,6 @@
 Item = require './Item'
 ItemRange = require './ItemRange'
 
-module.exports = Saddle
 
 class Saddle
   constructor: (options)->
@@ -26,3 +25,6 @@ for own methodName of (Item::)
   Saddle::[methodName] = do (methodName = methodName)->
     (id, arg1, arg2, arg3)->
       new Item(id)[methodName](arg1, arg2, arg3)
+
+
+module.exports = Saddle
