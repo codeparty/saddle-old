@@ -43,7 +43,7 @@ class ItemRange
     range = @range
     range.deleteContents()
     range.insertNode createContextualFragment html
-    @
+    return
 
 
   append: (html)->
@@ -53,19 +53,19 @@ class ItemRange
     nodeAfterRange = endContainer.childNodes[range.endOffset]
     #TODO: check. Might not work if there no nodes after
     nodeAfterRange.insertAdjacentHTML 'beforebegin', html
-    @
+    return
 
   insert: (html, index)->
     range = @range
     indexNode = range.startContainer.childNodes[range.startOffset + index];
     indexNode.insertAdjacentHTML 'beforebegin', html
-    @
+    return
 
   remove: (index)->
     range = @range
     startContainer = range.startContainer
     startContainer.removeChild startContainer.childNodes[range.startOffset + index]
-    @
+    return
 
   move: (from, to, howMany = 1)->
     range = @range
@@ -87,4 +87,4 @@ class ItemRange
         frag.appendChild child
         child = child.nextSibling()
       startContainer.insertBefore(frag, before);
-    @
+    return
