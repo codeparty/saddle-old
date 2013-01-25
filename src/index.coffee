@@ -18,9 +18,9 @@ class Saddle
 
   getMarkerTpl = ->
     if @useTags
-      (id)-> "<comment id=#{id}></comment>"
+      (id)-> ["<comment id=#{id}/>", "<comment id=#{@prefix + id}/>"]
     else
-      (id)-> "<!-- #{id} -->"
+      (id)-> ["<!--#{id}-->", "<!--#{@prefix + id}-->"]
 
 for own methodName of (Item::)
   Saddle::[methodName] = do (methodName = methodName)->
