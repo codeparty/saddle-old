@@ -10,9 +10,10 @@ basePath = '.';
 files = [
   MOCHA,
   MOCHA_ADAPTER,
-  'test/assets/jquery-1.9.0.js',
+  'mocha.conf.js',
+  'assets/jquery-1.9.0.js',
 
-  'test/build/browserified.js'
+  'build/browserified.js'
 ];
 
 
@@ -24,7 +25,7 @@ exclude = [
 
 // test results reporter to use
 // possible values: 'dots', 'progress', 'junit'
-reporters = ['progress'];
+reporters = ['dots'];
 
 
 // web server port
@@ -60,7 +61,7 @@ browsers = ['Chrome', 'Firefox', 'Opera', 'Safari'];
 
 
 // If browser does not capture in given timeout [ms], kill it
-captureTimeout = 10000;
+captureTimeout = 20000;
 
 
 // Continuous Integration mode

@@ -20,7 +20,7 @@ module.exports = function (grunt) {
         options: {
           keepalive: false
         },
-        configFile: 'testacular.conf.js',
+        configFile: 'test/testacular.conf.js',
         watch: false
       }
     },
