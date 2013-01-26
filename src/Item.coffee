@@ -54,7 +54,11 @@ class Item
     return
 
   insert: (html, index)->
-    @el.childNodes[index].insertAdjacentHTML 'beforebegin', html
+    # handling rage overflow
+    if (childNodes = @el.childNodes).length <= index
+      @append html
+    else
+      childNodes[index].insertAdjacentHTML 'beforebegin', html
     return
 
   remove: (index)->

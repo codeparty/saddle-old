@@ -4,7 +4,6 @@ class ItemRange
   @useTags = false
   #private static properties
   doc = document
-  createRange = -> doc.createRange()
 
   commentsMap = {}
 
@@ -21,23 +20,35 @@ class ItemRange
       commentsMap[comment.data] = comment
 
     if comment = commentsMap[id]
-      new ItemRange comment, id
+      new ItemRange comment, commentsMap[ItemRange.prefix + id], id
 
   @clear: ->
     commentsMap = {}
 
-  constructor: (@el, id)->
-    end = commentsMap[ItemRange.prefix + id]
 
-    @range = range = createRange()
-    range.setStartAfter(el)
-    range.setEndBefore(end)
+  constructor: (@start, @end, id)->
+    @el = start
+    @range = doc.createRange()
+    @_ranged = false
+    @_updateRange()
+
+
+  _updateRange: ->
+    # startOffset and endOffset might be messed
+    # after dom manipulation in dom
+    unless @_ranged
+      range = @range
+      range.setStartAfter @start
+      range.setEndBefore @end
+      @_ranged = true
+    return
 
 
   setHtml: (html)->
     range = @range
     range.deleteContents()
     range.insertNode range.createContextualFragment(html)
+    @_ranged = false
     return
 
 
@@ -45,18 +56,26 @@ class ItemRange
     # TODO: check for simple insertBefore range.end
     range = @range
     endContainer = range.endContainer
-    console.log closingMarker = endContainer.childNodes[range.endOffset]
-    #TODO: check. Might not work if there no nodes after
-    endContainer.insertBefore range.createContextualFragment(html), closingMarker
+    endContainer.insertBefore range.createContextualFragment(html), @end
+    @_ranged = false
     return
 
   insert: (html, index)->
+    @_updateRange()
     range = @range
-    indexNode = range.startContainer.childNodes[range.startOffset + index];
-    indexNode.insertAdjacentHTML 'beforebegin', html
+    # handling rage overflow
+    #TODO: try DRY
+    if range.endOffset - range.startOffset < index
+      @append html
+    else
+      startContainer = range.startContainer
+      indexNode = startContainer.childNodes[range.startOffset + index]
+      startContainer.insertBefore range.createContextualFragment(html), indexNode
+      @_ranged = false
     return
 
   remove: (index)->
+    @_updateRange()
     range = @range
     startContainer = range.startContainer
     startContainer.removeChild startContainer.childNodes[range.startOffset + index]
