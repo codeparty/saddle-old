@@ -22,8 +22,24 @@ beforeEach ->
     '' + '<p>3-3</p>'
     '' + '<!--$$4-->'
     '</div>'
-    '<input id=$5 value=test>'
-    '<input id=$6 type=checkbox checked>'
+    '<div id=$5 class=test>'
+    '' + '<p>5-1</p>'
+    '' + '<p>5-2</p>'
+    '' + '<p>5-3</p>'
+    '' + '<p>5-4</p>'
+    '' + '<p>5-5</p>'
+    '' + '<p>5-6</p>'
+    '' + '<!--$6-->'
+    '' + '<p>5-7</p>'
+    '' + '<p>5-8</p>'
+    '' + '<p>5-9</p>'
+    '' + '<p>5-10</p>'
+    '' + '<p>5-11</p>'
+    '' + '<p>5-12</p>'
+    '' + '<!--$$6-->'
+    '</div>'
+    '<input id=$7 value=test>'
+    '<input id=$8 type=checkbox checked>'
   ].join ''
 
 
@@ -32,9 +48,9 @@ describe 'Saddle', ->
     it 'should get attribute', ->
       expect(saddle.getAttr '$2', 'class').to.be 'test'
       expect(saddle.getAttr '$2', 'class').to.be 'test'
-      expect(saddle.getAttr '$5', 'value').to.be 'test'
-      expect(saddle.getAttr '$6', 'checked').to.be ''
-      expect(saddle.getAttr '$6', 'absent').to.be null
+      expect(saddle.getAttr '$7', 'value').to.be 'test'
+      expect(saddle.getAttr '$8', 'checked').to.be ''
+      expect(saddle.getAttr '$8', 'absent').to.be null
 
 
   describe '#setAttr()', ->
@@ -48,18 +64,18 @@ describe 'Saddle', ->
 
   describe '#getProp()', ->
     it 'should get property', ->
-      expect(saddle.getProp '$5', 'value').to.be 'test'
-      expect(saddle.getProp '$6', 'checked').to.be true
-      expect(saddle.getProp '$6', 'absent').to.be undefined
+      expect(saddle.getProp '$7', 'value').to.be 'test'
+      expect(saddle.getProp '$8', 'checked').to.be true
+      expect(saddle.getProp '$8', 'absent').to.be undefined
 
     it 'should get property after user iteration', ->
-      $5 = $ document.getElementById '$5'
+      $5 = $ document.getElementById '$7'
       $5.attr 'value', 'derbyjs'
-      expect(saddle.getProp '$5', 'value').to.be 'derbyjs'
+      expect(saddle.getProp '$7', 'value').to.be 'derbyjs'
 
-      $6 = $ document.getElementById '$6'
+      $6 = $ document.getElementById '$8'
       $6.trigger 'click'
-      expect(saddle.getProp '$6', 'checked').to.be false
+      expect(saddle.getProp '$8', 'checked').to.be false
 
       # TODO: simulate keyboard press into text field
       return
@@ -67,12 +83,12 @@ describe 'Saddle', ->
 
   describe '#setProp()', ->
     it 'should set property', ->
-      saddle.setProp '$5', 'value', 'coolness'
-      $5 = $ document.getElementById '$5'
+      saddle.setProp '$7', 'value', 'coolness'
+      $5 = $ document.getElementById '$7'
       expect($5.prop('value')).to.be 'coolness'
 
-      saddle.setProp '$6', 'checked', false
-      $6 = $ document.getElementById '$6'
+      saddle.setProp '$8', 'checked', false
+      $6 = $ document.getElementById '$8'
       expect($6.prop('checked')).to.be false
 
 
@@ -179,3 +195,62 @@ describe 'Saddle', ->
       expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-2</p><p>4-9</p><!--$$4-->'
 
 
+  describe '#remove()', ->
+    it 'should remove items from div', ->
+      $1 = $ document.getElementById '$1'
+      $3 = $ document.getElementById '$3'
+
+      saddle.remove '$1', 0
+      expect($1.html()).to.be ''
+
+      saddle.remove '$3', 3
+      saddle.remove '$3', 1
+      expect($3.html()).to.be '<p>3-1</p><!--$4--><!--$$4-->'
+
+
+    it 'should remove items from a crooked range', ->
+      saddle.remove '$0', 0
+      expect(document.getElementById '$1').to.be null
+
+
+    it 'should remove items from a normal range', ->
+      $3 = $ document.getElementById '$3'
+
+      saddle.append '$4', '<p>4-4</p>'
+      saddle.append '$4', '<p>4-5</p>'
+      saddle.append '$4', '<p>4-6</p>'
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-4</p><p>4-5</p><p>4-6</p><!--$$4-->'
+
+      saddle.remove '$4', 2
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-4</p><p>4-6</p><!--$$4-->'
+
+      saddle.remove '$4', 0
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-4</p><p>4-6</p><!--$$4-->'
+
+      saddle.remove '$4', 1
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-4</p><!--$$4-->'
+
+
+  describe '#move()', ->
+    it 'should move items in div', ->
+      $1 = $ document.getElementById '$1'
+      $3 = $ document.getElementById '$3'
+
+      saddle.move '$1', 0
+      expect($1.html()).to.be ''
+
+      saddle.move '$3', 3
+      saddle.move '$3', 1
+      expect($3.html()).to.be '<p>3-1</p><!--$4--><!--$$4-->'
+
+
+    it 'should move items from a crooked range', ->
+      saddle.move '$0', 0
+      expect(document.getElementById '$1').to.be null
+
+
+    it 'should move items from a normal range', ->
+      $3 = $ document.getElementById '$3'
+
+      saddle.move '$4', 1
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-4</p><!--$$4-->'
