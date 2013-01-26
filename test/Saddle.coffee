@@ -5,27 +5,26 @@ saddle = new Saddle
 
 beforeEach ->
   saddle.clear()
-  document.body.innerHTML =
-    '''
-    <!--$0-->
-    <div id=$1><p>1</p></div>
-    <div id=$2 class=test>
-    <p>2-1</p>
-    <!--$$0-->
-    <p>2-2</p>
-    </div>
-    <div id=$3 class=test>
-    <p>3-1</p>
-    <p>3-2</p>
-    <!--$4-->
-    <p>4-3</p>
-    <p>4-4</p>
-    <p>4-5</p>
-    <!--$$4-->
-    </div>
-    <input id=$5 value=test>
-    <input id=$6 type=checkbox checked>
-    '''
+  document.body.innerHTML = [
+    '<!--$0-->'
+    '<div id=$1>'
+    '' + '<p>1</p>'
+    '</div>'
+    '<div id=$2 class=test>'
+    '' + '<p>2-1</p>'
+    '' + '<!--$$0-->'
+    '' + '<p>2-2</p>'
+    '</div>'
+    '<div id=$3 class=test>'
+    '' + '<p>3-1</p>'
+    '' + '<p>3-2</p>'
+    '' + '<!--$4-->'
+    '' + '<p>3-3</p>'
+    '' + '<!--$$4-->'
+    '</div>'
+    '<input id=$5 value=test>'
+    '<input id=$6 type=checkbox checked>'
+  ].join ''
 
 
 describe 'Saddle', ->
@@ -95,17 +94,17 @@ describe 'Saddle', ->
     it 'should set HTML for crooked range', ->
       saddle.setHtml '$0', 'test'
       $2 = $ document.getElementById '$2'
-      expect($2.html().replace /\s+/g, '').to.be '<!--$$0--><p>2-2</p>'
+      expect($2.html()).to.be '<!--$$0--><p>2-2</p>'
       expect(document.getElementById '$1').to.be null
 
     it 'should set HTML for normal range', ->
       saddle.setHtml '$4', 'test<i></i>'
       $3 = $ document.getElementById '$3'
-      expect($3.html().replace /\s+/g, '').to.be '<p>3-1</p><p>3-2</p><!--$4-->test<i></i><!--$$4-->'
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4-->test<i></i><!--$$4-->'
 
       saddle.setHtml '$4', ''
       $3 = $ document.getElementById '$3'
-      expect($3.html().replace /\s+/g, '').to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
 
 
   describe '#append()', ->
@@ -119,13 +118,64 @@ describe 'Saddle', ->
       expect($1.html()).to.be '<p>1</p><p>2</p><p>3</p>'
 
 
-    it 'should append html to crooked renge', ->
+    it 'should append html to crooked range', ->
       $2 = $ document.getElementById '$2'
 
       saddle.append '$0', '<p>0-1</p>'
-      expect($2.html().replace /\s+/g, '').to.be '<p>2-1</p><p>0-1</p><!--$$0--><p>2-2</p>'
+      expect($2.html()).to.be '<p>2-1</p><p>0-1</p><!--$$0--><p>2-2</p>'
 
       saddle.append '$0', '<p>0-2</p>'
-      expect($2.html().replace /\s+/g, '').to.be '<p>2-1</p><p>0-1</p><p>0-2</p><!--$$0--><p>2-2</p>'
+      expect($2.html()).to.be '<p>2-1</p><p>0-1</p><p>0-2</p><!--$$0--><p>2-2</p>'
+
+
+    it 'should append html to normal range', ->
+      $3 = $ document.getElementById '$3'
+
+      saddle.append '$4', '<p>4-1</p>'
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-1</p><!--$$4-->'
+
+      saddle.append '$4', '<p>4-2</p>'
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-1</p><p>4-2</p><!--$$4-->'
+
+
+  describe '#insert()', ->
+    it 'should insert html to div', ->
+      $1 = $ document.getElementById '$1'
+
+      saddle.insert '$1', '<p>0</p>', 0
+      expect($1.html()).to.be '<p>0</p><p>1</p>'
+
+      saddle.insert '$1', '<p>2</p>', 2
+      expect($1.html()).to.be '<p>0</p><p>1</p><p>2</p>'
+
+      saddle.insert '$1', '<p>0.5</p>', 1
+      expect($1.html()).to.be '<p>0</p><p>0.5</p><p>1</p><p>2</p>'
+
+
+    it 'should insert html to crooked range', ->
+      $1 = $ document.getElementById '$1'
+
+      saddle.insert '$0', '<div><p>0-0</p></div>', 0
+      expect($1.prev().html()).to.be '<p>0-0</p>'
+
+
+    it 'should insert html to normal range', ->
+      $3 = $ document.getElementById '$3'
+
+      saddle.insert '$4', '<p>4-0</p>', 0
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><!--$$4-->'
+
+      saddle.insert '$4', '<p>4-2</p>', 2
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><p>4-2</p><!--$$4-->'
+
+
+    it 'should handle range overwlof', ->
+      $3 = $ document.getElementById '$3'
+
+      saddle.insert '$4', '<p>4-2</p>', 2
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-2</p><!--$$4-->'
+
+      saddle.insert '$4', '<p>4-9</p>', 9
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-2</p><p>4-9</p><!--$$4-->'
 
 
