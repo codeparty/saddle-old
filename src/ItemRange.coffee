@@ -11,7 +11,7 @@ class ItemRange
   @get: (id)->
     # TODO: DRY
     if (comment = commentsMap[id]) and doc.contains comment
-      return new ItemRange comment, id
+      return new ItemRange comment, commentsMap[ItemRange.prefix + id], id
 
     commentsMap = {}
     # NodeFilter.SHOW_COMMENT == 128
@@ -20,6 +20,7 @@ class ItemRange
       commentsMap[comment.data] = comment
 
     if comment = commentsMap[id]
+      # TODO: DRY
       new ItemRange comment, commentsMap[ItemRange.prefix + id], id
 
   @clear: ->
@@ -64,13 +65,12 @@ class ItemRange
     @_updateRange()
     range = @range
     # handling rage overflow
-    #TODO: try DRY
     if range.endOffset - range.startOffset < index
       @append html
     else
       startContainer = range.startContainer
-      indexNode = startContainer.childNodes[range.startOffset + index]
-      startContainer.insertBefore range.createContextualFragment(html), indexNode
+      nodeInsertBefore = startContainer.childNodes[range.startOffset + index]
+      startContainer.insertBefore range.createContextualFragment(html), nodeInsertBefore
       @_ranged = false
     return
 
