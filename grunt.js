@@ -20,8 +20,7 @@ module.exports = function (grunt) {
         options: {
           keepalive: false
         },
-        configFile: 'test/testacular.conf.js',
-        watch: false
+        configFile: 'test/testacular.conf.js'
       }
     },
 
@@ -35,10 +34,6 @@ module.exports = function (grunt) {
       browserify: {
         files: ['lib/*.js', 'test/*.coffee'],
         tasks: 'browserify'
-      },
-      test: {
-        files: 'test/build/browserified.js',
-        tasks: 'testacularServer'
       }
     }
 
@@ -46,7 +41,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', 'bgShell:watchCoffee');
 
-  grunt.registerTask('test', 'browserify testacularServer watch:browserify watch:test');
+  grunt.registerTask('test', 'browserify testacularServer watch:browserify');
 
 
 };
