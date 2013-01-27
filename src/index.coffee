@@ -15,9 +15,15 @@ class Saddle
     if (item = map[id]) and doc.contains(item.el || item)
       return item
 
+  updateMarkersMap = ->
+    markersMap = {}
 
-  createItemRange = (id, comment)->
-    new ItemRange comment, markersMap[prefix + id], id
+    # NodeFilter.SHOW_COMMENT == 128
+    commentIterator = doc.createTreeWalker(doc.body, 128, null, false)
+    while comment = commentIterator.nextNode()
+      markersMap[comment.data] = comment
+
+    return
 
 
   constructor: (options = {})->
@@ -36,18 +42,14 @@ class Saddle
     if (el = doc.getElementById(id)) and el.tagName isnt 'COMMENT'
       return itemsMap[id] = new Item el
 
-    if comment = getCachedItem id, markersMap
-      return itemsMap[id] = createItemRange id, comment, @prefix
+    unless comment = getCachedItem id, markersMap
+      updateMarkersMap()
+      comment = markersMap[id]
 
-    markersMap = {}
+    if comment
+      return itemsMap[id] = createItemRange id, comment
 
-    # NodeFilter.SHOW_COMMENT == 128
-    commentIterator = doc.createTreeWalker(doc.body, 128, null, false)
-    while comment = commentIterator.nextNode()
-      markersMap[comment.data] = comment
-
-    if comment = markersMap[id]
-      return itemsMap[id] = createItemRange id, comment, @prefix
+    return
 
 
   clear: ->
