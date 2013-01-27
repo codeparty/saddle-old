@@ -16,11 +16,15 @@ class Saddle
 
   uid: ()-> @prefix + (@_id++).toString(36)
 
-  getMarkerTpl = ->
+  getMarkerTpl: ->
     if @useTags
       (id)-> ["<comment id=#{id}/>", "<comment id=#{@prefix + id}/>"]
     else
       (id)-> ["<!--#{id}-->", "<!--#{@prefix + id}-->"]
+
+  prepend: (id, html)->
+    @insert id, html, 0
+    return
 
 for own methodName of (Item::)
   Saddle::[methodName] = do (methodName = methodName)->
