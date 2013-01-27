@@ -134,16 +134,6 @@ describe 'Saddle', ->
       expect($1.html()).to.be '<p>1</p><p>2</p><p>3</p>'
 
 
-    it 'should append html to crooked range', ->
-      $2 = $ document.getElementById '$2'
-
-      saddle.append '$0', '<p>0-1</p>'
-      expect($2.html()).to.be '<p>2-1</p><p>0-1</p><!--$$0--><p>2-2</p>'
-
-      saddle.append '$0', '<p>0-2</p>'
-      expect($2.html()).to.be '<p>2-1</p><p>0-1</p><p>0-2</p><!--$$0--><p>2-2</p>'
-
-
     it 'should append html to normal range', ->
       $3 = $ document.getElementById '$3'
 
@@ -233,24 +223,49 @@ describe 'Saddle', ->
 
   describe '#move()', ->
     it 'should move items in div', ->
-      $1 = $ document.getElementById '$1'
+      $3 = $ document.getElementById '$3'
+      $5 = $ document.getElementById '$5'
+
+      saddle.move '$3', 0, 1
+      expect($3.html()).to.be '<p>3-2</p><p>3-1</p><!--$4--><p>3-3</p><!--$$4-->'
+
+      saddle.move '$3', 0, 4, 2
+      expect($3.html()).to.be '<!--$4--><p>3-3</p><!--$$4--><p>3-2</p><p>3-1</p>'
+
+      saddle.move '$5', 3, 1, 3
+      expect($5.html()).to.be '<p>5-1</p><p>5-4</p><p>5-5</p><p>5-6</p><p>5-2</p><p>5-3</p><!--$6--><p>5-7</p><p>5-8</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><!--$$6-->'
+
+      saddle.move '$5', 7, 0, 6
+      expect($5.html()).to.be '<p>5-7</p><p>5-8</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><p>5-1</p><p>5-4</p><p>5-5</p><p>5-6</p><p>5-2</p><p>5-3</p><!--$6--><!--$$6-->'
+
+    it 'should handle move index overflow in div', ->
       $3 = $ document.getElementById '$3'
 
-      saddle.move '$1', 0
-      expect($1.html()).to.be ''
-
-      saddle.move '$3', 3
-      saddle.move '$3', 1
-      expect($3.html()).to.be '<p>3-1</p><!--$4--><!--$$4-->'
-
-
-    it 'should move items from a crooked range', ->
-      saddle.move '$0', 0
-      expect(document.getElementById '$1').to.be null
+      saddle.move '$3', 0, 1000, 2
+      expect($3.html()).to.be '<!--$4--><p>3-3</p><!--$$4--><p>3-1</p><p>3-2</p>'
 
 
     it 'should move items from a normal range', ->
-      $3 = $ document.getElementById '$3'
+      $5 = $ document.getElementById '$5'
+      preHtml = '<p>5-1</p><p>5-2</p><p>5-3</p><p>5-4</p><p>5-5</p><p>5-6</p>'
 
-      saddle.move '$4', 1
-      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-4</p><!--$$4-->'
+      saddle.move '$6', 0, 1
+      expect($5.html()).to.be preHtml + '<!--$6--><p>5-8</p><p>5-7</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><!--$$6-->'
+
+      saddle.move '$6', 1, 2, 2
+      expect($5.html()).to.be preHtml + '<!--$6--><p>5-8</p><p>5-10</p><p>5-7</p><p>5-9</p><p>5-11</p><p>5-12</p><!--$$6-->'
+
+      saddle.move '$6', 4, 1, 2
+      expect($5.html()).to.be preHtml + '<!--$6--><p>5-8</p><p>5-11</p><p>5-12</p><p>5-10</p><p>5-7</p><p>5-9</p><!--$$6-->'
+
+      saddle.move '$6', 0, 5
+      expect($5.html()).to.be preHtml + '<!--$6--><p>5-11</p><p>5-12</p><p>5-10</p><p>5-7</p><p>5-9</p><p>5-8</p><!--$$6-->'
+
+
+    it 'should handle move index overflow in a normal range', ->
+      $5 = $ document.getElementById '$5'
+      preHtml = '<p>5-1</p><p>5-2</p><p>5-3</p><p>5-4</p><p>5-5</p><p>5-6</p>'
+
+      saddle.move '$6', 0, 1000, 2
+      expect($5.html()).to.be preHtml + '<!--$6--><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><p>5-7</p><p>5-8</p><!--$$6-->'
+
