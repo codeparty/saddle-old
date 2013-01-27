@@ -1,3 +1,5 @@
+util = require './util'
+
 class ItemRange
 #static properties
   @prefix = '$'
@@ -54,10 +56,8 @@ class ItemRange
 
 
   append: (html)->
-    # TODO: check for simple insertBefore range.end
-    range = @range
-    endContainer = range.endContainer
-    endContainer.insertBefore range.createContextualFragment(html), @end
+    @_updateRange()
+    util.rangeIns @range, html
     @_ranged = false
     return
 
@@ -68,39 +68,27 @@ class ItemRange
     if range.endOffset - range.startOffset < index
       @append html
     else
-      startContainer = range.startContainer
-      nodeInsertBefore = startContainer.childNodes[range.startOffset + index]
-      startContainer.insertBefore range.createContextualFragment(html), nodeInsertBefore
+      util.rangeIns @range, html, index
       @_ranged = false
     return
 
   remove: (index)->
     @_updateRange()
     range = @range
-    startContainer = range.startContainer
-    startContainer.removeChild startContainer.childNodes[range.startOffset + index]
+    util.rmChild range.startContainer, range.startOffset + index
     return
 
   move: (from, to, howMany = 1)->
     range = @range
-
-    startContainer = range.startContainer
     offset = range.startOffset
+    endOffset = range.endOffset
 
+    indexTo = offset + `(to >= from ? to + howMany : to)`
+    #handle overflow
+    if indexTo > endOffset
+      indexTo = endOffset
 
-    #TODO: cache childNodes
-    child = startContainer.childNodes[from + offset]
-    before = startContainer.childNodes[to + offset]
-
-    #TODO: refactor DRY
-    if howMany is 1
-      startContainer.insertBefore(child, before);
-    else
-      frag = doc.createDocumentFragment()
-      while howMany--
-        frag.appendChild child
-        child = child.nextSibling()
-      startContainer.insertBefore(frag, before);
+    util.move range.startContainer, offset + from, indexTo, howMany
     return
 
 

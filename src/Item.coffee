@@ -1,3 +1,4 @@
+util = require './util'
 ItemRange = require './ItemRange'
 
 
@@ -62,24 +63,12 @@ class Item
     return
 
   remove: (index)->
-    el = @el
-    el.removeChild el.childNodes[index]
+    util.rmChild @el, index
     return
 
   move: (from, to, howMany = 1)->
-    el = @el
-    child = @el.childNodes[from]
-    before = @el.childNodes[to]
 
-    #TODO: check this
-    if howMany is 1
-      el.insertBefore(child, before);
-    else
-      frag = doc.createDocumentFragment()
-      while howMany--
-        frag.appendChild child
-        child = child.nextSibling()
-      el.insertBefore(frag, before)
+    util.move @el, from, `to >= from ? to + howMany : to`, howMany
     return
 
 
