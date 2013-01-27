@@ -47,7 +47,7 @@ class Saddle
       comment = markersMap[id]
 
     if comment
-      return itemsMap[id] = createItemRange id, comment
+      return itemsMap[id] = new ItemRange comment, markersMap[prefix + id]
 
     return
 

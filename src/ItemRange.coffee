@@ -8,7 +8,7 @@ class ItemRange
   doc = document
 
 
-  constructor: (@start, @end, id)->
+  constructor: (@start, @end)->
     @el = start
     @range = doc.createRange()
     @_ranged = false
