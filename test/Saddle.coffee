@@ -123,6 +123,27 @@ describe 'Saddle', ->
       expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
 
 
+  describe '#prepend()', ->
+    it 'should append html to div', ->
+      $1 = $ document.getElementById '$1'
+
+      saddle.prepend '$1', '<p>0</p>'
+      expect($1.html()).to.be '<p>0</p><p>1</p>'
+
+      saddle.prepend '$1', '<p>-1</p>'
+      expect($1.html()).to.be '<p>-1</p><p>0</p><p>1</p>'
+
+
+    it 'should append html to normal range', ->
+      $3 = $ document.getElementById '$3'
+
+      saddle.prepend '$4', '<p>4-0</p>'
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><!--$$4-->'
+
+      saddle.prepend '$4', '<p>4--1</p>'
+      expect($3.html()).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4--1</p><p>4-0</p><p>3-3</p><!--$$4-->'
+
+
   describe '#append()', ->
     it 'should append html to div', ->
       $1 = $ document.getElementById '$1'
