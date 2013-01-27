@@ -1,27 +1,8 @@
 util = require './util'
-ItemRange = require './ItemRange'
 
 
 class Item
   doc = document
-
-  itemsMap = {}
-
-  @get: (id)->
-    #TODO: figure out the same prop name
-    # making sure that doc has el or marker for range
-    if (item = itemsMap[id]) and doc.contains item.el
-      return item
-
-    itemsMap[id] = if (el = doc.getElementById(id))
-      new Item el
-    else
-      ItemRange.get id
-
-  @clear: ->
-    itemsMap = {}
-    return
-
 
   constructor: (@el)->
 

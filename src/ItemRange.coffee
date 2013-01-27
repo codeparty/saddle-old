@@ -7,27 +7,6 @@ class ItemRange
   #private static properties
   doc = document
 
-  commentsMap = {}
-
-  #static method
-  @get: (id)->
-    # TODO: DRY
-    if (comment = commentsMap[id]) and doc.contains comment
-      return new ItemRange comment, commentsMap[ItemRange.prefix + id], id
-
-    commentsMap = {}
-    # NodeFilter.SHOW_COMMENT == 128
-    commentIterator = doc.createTreeWalker(doc.body, 128, null, false)
-    while comment = commentIterator.nextNode()
-      commentsMap[comment.data] = comment
-
-    if comment = commentsMap[id]
-      # TODO: DRY
-      new ItemRange comment, commentsMap[ItemRange.prefix + id], id
-
-  @clear: ->
-    commentsMap = {}
-
 
   constructor: (@start, @end, id)->
     @el = start
