@@ -4,37 +4,36 @@ ItemRange = require './ItemRange'
 doc = document
 
 class Saddle
-  #private static props
-  itemsMap = {}
-  markersMap = {}
-  prefix = ''
-
-
-  #private static methods
+#private static methods
   getCachedItem = (id, map)->
     if (item = map[id]) and doc.contains(item.el || item)
       return item
 
-  updateMarkersMap = ->
-    markersMap = {}
+
+  constructor: (options)->
+    options ||= {}
+    @prefix = options.prefix || '$'
+    @useTags = !!options.useTags
+
+    @itemsMap = {}
+    @markersMap = {}
+    @_id = 0
+
+
+  _updateMarkers: ->
+    @markersMap = markersMap = {}
 
     # NodeFilter.SHOW_COMMENT == 128
     commentIterator = doc.createTreeWalker(doc.body, 128, null, false)
     while comment = commentIterator.nextNode()
       markersMap[comment.data] = comment
 
-    return
-
-
-  constructor: (options = {})->
-    # TODO: figure out better config sharing
-    prefix = @prefix = ItemRange.prefix = options.prefix || '$'
-    @useTags = ItemRange.useTags = !!options.useTags
-
-    @_id = 0
+    markersMap
 
 
   get: (id)->
+    itemsMap = @itemsMap
+    markersMap = @markersMap
     # making sure that there is el or marker in doc
     if item = getCachedItem(id, itemsMap)
       return item
@@ -43,18 +42,19 @@ class Saddle
       return itemsMap[id] = new Item el
 
     unless comment = getCachedItem id, markersMap
-      updateMarkersMap()
+      markersMap = @_updateMarkers()
       comment = markersMap[id]
 
     if comment
-      return itemsMap[id] = new ItemRange comment, markersMap[prefix + id]
+      return itemsMap[id] = new ItemRange comment, markersMap[@prefix + id]
 
     return
 
 
   clear: ->
-    itemsMap = {}
-    markersMap = {}
+    @itemsMap = {}
+    @markersMap = {}
+    @_id = 0
     return
 
 

@@ -1,9 +1,6 @@
 util = require './util'
 
 class ItemRange
-#static properties
-  @prefix = '$'
-  @useTags = false
   #private static properties
   doc = document
 
