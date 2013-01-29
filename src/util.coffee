@@ -15,22 +15,17 @@ module.exports =
     childNodes = el.childNodes
     child = childNodes[from]
 
-    if before = childNodes[toIndex]
-      insert = (node)->
-        el.insertBefore node, before
-        return
-    else
-      insert = (node)->
-        el.appendChild node
-        return
+    # If before is null, new element is inserted at the end of the list of child nodes
+    # https://developer.mozilla.org/en-US/docs/DOM/Node.insertBefore
+    before = childNodes[toIndex] || null
 
     if howMany is 1
-      insert child
+      el.insertBefore child, before
     else
       frag = doc.createDocumentFragment()
       while howMany--
         next = child.nextSibling
         frag.appendChild child
         child = next
-      insert frag
+      el.insertBefore frag, before
     return
