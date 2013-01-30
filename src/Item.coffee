@@ -4,7 +4,12 @@ util = require './util'
 class Item
   doc = document
 
-  constructor: (@el)->
+  constructor: (el)->
+    @el = el
+    @svg = svg = !!el.ownerSVGElement || el.tagName is "svg"
+    @svgRoot = if svg
+      el.ownerSVGElement || el
+    else null
 
 
   getAttr: (name)->
@@ -27,7 +32,17 @@ class Item
     @el.innerHTML
 
   setHtml: (html)->
-    @el.innerHTML = html
+    el = @el
+
+    if @svg
+      el = @el
+      children = el.childNodes
+      i = children.length
+      while i--
+        el.removeChild children[i]
+      el.appendChild util.createFragment el, html
+    else
+      el.innerHTML = html
     return
 
 
@@ -48,7 +63,6 @@ class Item
     return
 
   move: (from, to, howMany = 1)->
-
     util.move @el, from, `to >= from ? to + howMany : to`, howMany
     return
 
