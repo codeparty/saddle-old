@@ -107,12 +107,6 @@ describe 'Saddle', ->
       $1 = $ document.getElementById '$1'
       expect($1.html()).to.be '<b>321</b>'
 
-    it 'should set HTML for crooked range', ->
-      saddle.setHtml '$0', 'test'
-      $2 = $ document.getElementById '$2'
-      expect($2.html()).to.be '<!--$$0--><p>2-2</p>'
-      expect(document.getElementById '$1').to.be null
-
     it 'should set HTML for normal range', ->
       saddle.setHtml '$4', 'test<i></i>'
       $3 = $ document.getElementById '$3'
@@ -179,13 +173,6 @@ describe 'Saddle', ->
       expect($1.html()).to.be '<p>0</p><p>0.5</p><p>1</p><p>2</p>'
 
 
-    it 'should insert html to crooked range', ->
-      $1 = $ document.getElementById '$1'
-
-      saddle.insert '$0', '<div><p>0-0</p></div>', 0
-      expect($1.prev().html()).to.be '<p>0-0</p>'
-
-
     it 'should insert html to normal range', ->
       $3 = $ document.getElementById '$3'
 
@@ -217,11 +204,6 @@ describe 'Saddle', ->
       saddle.remove '$3', 3
       saddle.remove '$3', 1
       expect($3.html()).to.be '<p>3-1</p><!--$4--><!--$$4-->'
-
-
-    it 'should remove items from a crooked range', ->
-      saddle.remove '$0', 0
-      expect(document.getElementById '$1').to.be null
 
 
     it 'should remove items from a normal range', ->
