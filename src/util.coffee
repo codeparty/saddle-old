@@ -1,17 +1,9 @@
-RangeShim = require './RangeShim'
+RangeImplementation = require './RangeShim'
 doc = document
 
-RangeImplementation = null
-
 module.exports =
-  createRange: do ->
-    if window.Range && Range.prototype.createContextualFragment
-      RangeImplementation = Range
-      return -> doc.createRange()
-    else
-      RangeImplementation = RangeShim
-      return -> new RangeShim
-    return
+  createRange: ->
+    new RangeImplementation
 
   rmChild: (el, index)->
     if child = el.childNodes[index]
@@ -38,9 +30,10 @@ module.exports =
     return
 
   createFragment: (rangeOrParent, html)->
-    if rangeOrParent instanceOf RangeImplementation
-      range = rangeOrParent
-    else
+    if rangeOrParent.nodeType
       range = @createRange()
-      range.setStart parent
+      range.setStartAfter rangeOrParent
+    else
+      range = rangeOrParent
+
     range.createContextualFragment html

@@ -1,5 +1,3 @@
-doc = document
-
 class RangeShim
   constructor: ->
     @_start = @_end =
@@ -39,19 +37,18 @@ class RangeShim
     open = wrap[1]
     close = wrap[2]
 
-    el = doc.createElement('div')
+    el = document.createElement('div')
     el.innerHTML = open + html + close
 
     while depth--
       el = el.firstChild
 
-    fragment = doc.createDocumentFragment()
+    fragment = document.createDocumentFragment()
 
     while node = el.firstChild
       fragment.appendChild node
 
     return fragment
-
 
 
 wrapMap =
@@ -66,4 +63,10 @@ wrapMap =
   _default: [ 0, '', '' ]
 
 
-module.exports = RangeShim
+if window.Range
+  unless Range::createContextualFragment
+    Range::createContextualFragment = RangeShim::createContextualFragment
+  module.exports = ->
+    document.createRange()
+else
+  module.exports = RangeShim
