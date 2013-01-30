@@ -6,11 +6,13 @@ class Item
 
   constructor: (el)->
     @el = el
-    @svg = svg = !!el.ownerSVGElement || el.tagName is "svg"
+    @svg = svg = !!el.ownerSVGElement || el.tagName is 'svg'
     @svgRoot = if svg
       el.ownerSVGElement || el
     else null
 
+  _svgFrag: (html)->
+    util.createFragment @svgRoot, html
 
   getAttr: (name)->
     @el.getAttribute name
@@ -37,25 +39,35 @@ class Item
     if @svg
       el = @el
       children = el.childNodes
-      i = children.length
-      while i--
-        el.removeChild children[i]
-      el.appendChild util.createFragment el, html
+      while child = el.firstChild
+        el.removeChild child
+      @append html
     else
       el.innerHTML = html
     return
 
 
   append: (html)->
-    @el.insertAdjacentHTML 'beforeend', html
+    el = @el
+
+    if @svg
+      el.appendChild @_svgFrag html
+    else
+      el.insertAdjacentHTML 'beforeend', html
+
     return
 
   insert: (html, index)->
+    el = @el
     # handling rage overflow
-    if (childNodes = @el.childNodes).length <= index
-      @append html
+    before = el.childNodes[index]
+    if before
+      if @svg
+        el.insertBefore @_svgFrag(html), before
+      else
+        before.insertAdjacentHTML 'beforebegin', html
     else
-      childNodes[index].insertAdjacentHTML 'beforebegin', html
+      @append html
     return
 
   remove: (index)->

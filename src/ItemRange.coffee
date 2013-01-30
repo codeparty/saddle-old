@@ -1,51 +1,60 @@
 util = require './util'
 
 class ItemRange
-  #private static properties
+#private static properties
   doc = document
 
 
   constructor: (@start, @end)->
     @el = start
-    @range = doc.createRange()
+    @range = util.createRange()
     @_ranged = false
     @_updateRange()
 
+    @svg = svg = !!start.ownerSVGElement || start.tagName is 'svg'
+    @svgRoot = if svg
+      start.ownerSVGElement || start
+    else null
+
+  _createFrag: (html)->
+    if @svg
+      util.createFragment @svgRoot, html
+    else
+      @range.createContextualFragment(html)
 
   _updateRange: ->
     # startOffset and endOffset might be messed
     # after dom manipulation in dom
-    unless @_ranged
-      range = @range
-      range.setStartAfter @start
-      range.setEndBefore @end
-      @_ranged = true
+    range = @range
+    range.setStartAfter @start
+    range.setEndBefore @end
     return
 
 
   setHtml: (html)->
+    @_updateRange()
     range = @range
     range.deleteContents()
-    range.insertNode range.createContextualFragment(html)
-    @_ranged = false
+    fragment =
+    range.insertNode @_createFrag html
     return
 
 
   append: (html)->
-    @_updateRange()
-    util.rangeIns @range, html
-    @_ranged = false
+    # insert to the end. `index = undefined` triggers range overflow
+    @insert html
     return
 
   insert: (html, index)->
     @_updateRange()
     range = @range
-    # handling rage overflow
-    if range.endOffset - range.startOffset < index
-      @append html
-    else
-      util.rangeIns @range, html, index
-      @_ranged = false
+
+    # handling range overflow
+    containerIndex = `range.endOffset - range.startOffset > index ? range.startOffset + index : range.endOffset`
+
+    startContainer = range.startContainer
+    nodeInsertBefore = startContainer.childNodes[containerIndex]
+    startContainer.insertBefore  @_createFrag(html), nodeInsertBefore
     return
 
   remove: (index)->
@@ -55,6 +64,7 @@ class ItemRange
     return
 
   move: (from, to, howMany = 1)->
+    @_updateRange()
     range = @range
     offset = range.startOffset
     endOffset = range.endOffset
