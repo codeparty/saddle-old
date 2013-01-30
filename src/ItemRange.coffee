@@ -11,16 +11,8 @@ class ItemRange
     @_ranged = false
     @_updateRange()
 
-    @svg = svg = !!start.ownerSVGElement || start.tagName is 'svg'
-    @svgRoot = if svg
-      start.ownerSVGElement || start
-    else null
-
   _createFrag: (html)->
-    if @svg
-      util.createFragment @svgRoot, html
-    else
-      @range.createContextualFragment(html)
+    util.createFragment(@el.ownerSVGElement || @range, html)
 
   _updateRange: ->
     # startOffset and endOffset might be messed
