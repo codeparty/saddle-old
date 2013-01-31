@@ -134,12 +134,12 @@ describe 'Saddle', ->
 
 
   describe '#getHtml()', ->
-    it 'should get HTML', ->
+    it 'should get html', ->
       expect(normalize saddle.getHtml('$1')).to.be '<p>1</p>'
 
 
   describe '#setHtml()', ->
-    it 'should set HTML for element', ->
+    it 'should set html for element', ->
       saddle.setHtml '$1', '<div>123</div>'
       $1 = $ document.getElementById '$1'
       expect(normalizedHtml $1).to.be '<div>123</div>'
@@ -148,13 +148,29 @@ describe 'Saddle', ->
       $1 = $ document.getElementById '$1'
       expect(normalizedHtml $1).to.be '<b>321</b>'
 
-    it 'should set HTML for svg element', ->
-      saddle.setHtml '$11', '<circle x=10></circle>'
+    it 'should set html for svg element', ->
       svg11 = document.getElementById '$11'
+
+      saddle.setHtml '$11', '<circle x=10></circle>'
       expect(svg11.firstChild.tagName).to.be 'circle'
       expect(svg11.childNodes.length).to.be 1
 
-    it 'should set HTML for normal range', ->
+      saddle.setHtml '$11', ''
+      expect(svg11.firstChild).to.be null
+      expect(svg11.childNodes.length).to.be 0
+
+    it 'should set html for svg element', ->
+      svg12 = document.getElementById '$12'
+
+      saddle.setHtml '$12', '<circle x=10></circle>'
+      expect(svg12.firstChild.tagName).to.be 'circle'
+      expect(svg12.childNodes.length).to.be 1
+
+      saddle.setHtml '$12', ''
+      expect(svg12.firstChild).to.be null
+      expect(svg12.childNodes.length).to.be 0
+
+    it 'should set html for normal range', ->
       $3 = $ document.getElementById '$3'
 
       saddle.setHtml '$4', 'test<i></i>'
@@ -163,7 +179,7 @@ describe 'Saddle', ->
       saddle.setHtml '$4', ''
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
 
-    it 'should set HTML for text range', ->
+    it 'should set html for text range', ->
       $9 = $ document.getElementById '$9'
 
       saddle.setHtml '$10', ' 2 '
@@ -172,7 +188,7 @@ describe 'Saddle', ->
       saddle.setHtml '$10', ''
       expect(normalizedHtml $9).to.be 'one <!--$10--><!--$$10-->three'
 
-    it 'should set HTML for svg element', ->
+    it 'should set html for svg range', ->
       svg11 = document.getElementById '$11'
 
       saddle.setHtml '$13', '<circle></circle>'
@@ -193,6 +209,26 @@ describe 'Saddle', ->
       saddle.prepend '$1', '<p>-1</p>'
       expect(normalizedHtml $1).to.be '<p>-1</p><p>0</p><p>1</p>'
 
+    it 'should prepend html to svg element', ->
+      svg11 = document.getElementById '$11'
+
+      saddle.prepend '$11', '<circle></circle>'
+      expect(svg11.firstChild.tagName).to.be 'circle'
+      expect(svg11.childNodes.length).to.be 7
+
+      saddle.prepend '$11', '<rect></rect>'
+      expect(svg11.firstChild.tagName).to.be 'rect'
+      expect(svg11.childNodes.length).to.be 8
+
+    it 'should prepend html to svg child', ->
+      svg12 = document.getElementById '$12'
+
+      saddle.prepend '$12', '<circle></circle>'
+      expect(svg12.firstChild.tagName).to.be 'circle'
+
+      saddle.prepend '$12', '<rect></rect>'
+      expect(svg12.firstChild.tagName).to.be 'rect'
+      expect(svg12.childNodes.length).to.be 2
 
     it 'should prepend html to normal range', ->
       $3 = $ document.getElementById '$3'
@@ -202,6 +238,17 @@ describe 'Saddle', ->
 
       saddle.prepend '$4', '<p>4--1</p>'
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4--1</p><p>4-0</p><p>3-3</p><!--$$4-->'
+
+    it 'should prepend html to svg range', ->
+      svg11 = document.getElementById '$11'
+
+      saddle.prepend '$13', '<circle></circle>'
+      expect(svg11.childNodes[3].tagName).to.be 'circle'
+      expect(svg11.childNodes.length).to.be 7
+
+      saddle.prepend '$13', '<rect></rect>'
+      expect(svg11.childNodes[3].tagName).to.be 'rect'
+      expect(svg11.childNodes.length).to.be 8
 
 
   describe '#append()', ->
@@ -214,6 +261,26 @@ describe 'Saddle', ->
       saddle.append '$1', '<p>3</p>'
       expect(normalizedHtml $1).to.be '<p>1</p><p>2</p><p>3</p>'
 
+    it 'should append html to svg element', ->
+      svg11 = document.getElementById '$11'
+
+      saddle.append '$11', '<rect></rect>'
+      expect(svg11.childNodes[6].tagName).to.be 'rect'
+      expect(svg11.childNodes.length).to.be 7
+
+      saddle.append '$11', '<circle></circle>'
+      expect(svg11.childNodes[7].tagName).to.be 'circle'
+      expect(svg11.childNodes.length).to.be 8
+
+    it 'should append html to svg child', ->
+      svg12 = document.getElementById '$12'
+
+      saddle.append '$12', '<rect></rect>'
+      expect(svg12.firstChild.tagName).to.be 'rect'
+
+      saddle.append '$12', '<circle></circle>'
+      expect(svg12.childNodes[1].tagName).to.be 'circle'
+      expect(svg12.childNodes.length).to.be 2
 
     it 'should append html to normal range', ->
       $3 = $ document.getElementById '$3'
@@ -223,6 +290,17 @@ describe 'Saddle', ->
 
       saddle.append '$4', '<p>4-2</p>'
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-1</p><p>4-2</p><!--$$4-->'
+
+    it 'should append html to svg range', ->
+      svg11 = document.getElementById '$11'
+
+      saddle.append '$13', '<circle></circle>'
+      expect(svg11.childNodes[5].tagName).to.be 'circle'
+      expect(svg11.childNodes.length).to.be 7
+
+      saddle.append '$13', '<rect></rect>'
+      expect(svg11.childNodes[6].tagName).to.be 'rect'
+      expect(svg11.childNodes.length).to.be 8
 
 
   describe '#insert()', ->
@@ -238,6 +316,26 @@ describe 'Saddle', ->
       saddle.insert '$1', '<p>0.5</p>', 1
       expect(normalizedHtml $1).to.be '<p>0</p><p>0.5</p><p>1</p><p>2</p>'
 
+    it 'should insert html to svg element', ->
+      svg11 = document.getElementById '$11'
+
+      saddle.insert '$11', '<rect></rect>', 1
+      expect(svg11.childNodes[1].tagName).to.be 'rect'
+      expect(svg11.childNodes.length).to.be 7
+
+      saddle.insert '$11', '<circle></circle>', 3
+      expect(svg11.childNodes[3].tagName).to.be 'circle'
+      expect(svg11.childNodes.length).to.be 8
+
+    it 'should insert html to svg child', ->
+      svg12 = document.getElementById '$12'
+
+      saddle.insert '$12', '<rect></rect>', 0
+      expect(svg12.childNodes[0].tagName).to.be 'rect'
+
+      saddle.insert '$12', '<circle></circle>', 2
+      expect(svg12.childNodes[1].tagName).to.be 'circle'
+      expect(svg12.childNodes.length).to.be 2
 
     it 'should insert html to normal range', ->
       $3 = $ document.getElementById '$3'
@@ -257,6 +355,18 @@ describe 'Saddle', ->
 
       saddle.insert '$4', '<p>4-9</p>', 9
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-2</p><p>4-9</p><!--$$4-->'
+
+    it 'should insert html to svg range', ->
+      svg11 = document.getElementById '$11'
+
+
+      saddle.insert '$13', '<rect></rect>', 1
+      expect(svg11.childNodes[4].tagName).to.be 'rect'
+      expect(svg11.childNodes.length).to.be 7
+
+      saddle.insert '$13', '<circle></circle>', 1
+      expect(svg11.childNodes[4].tagName).to.be 'circle'
+      expect(svg11.childNodes.length).to.be 8
 
 
   describe '#remove()', ->
