@@ -32,7 +32,11 @@ Run auto testing:
 ```sh
 $ grunt test
 ```
+Test opens Chrome by default
+You can open [localhost:8080](http://localhost:8080/) in any browser to run automated tests  
 Open local file `test/mocha.ie6.html` in IE 6
+
+You can find borwser tests  `test/Saddle.coffee`
 
 
 ### Test status
