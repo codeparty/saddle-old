@@ -53,7 +53,10 @@ beforeEach ->
   return
 
 normalize = (html)->
-  html.toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')
+  html = html.toLowerCase().replace(/\r\n/g, '')
+  if !document.createTreeWalker
+    html = html.replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')
+  html
 
 normalizedHtml = ($node)->
   normalize $node.html()
