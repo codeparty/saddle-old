@@ -52,6 +52,11 @@ beforeEach ->
   testDiv.innerHTML = testHtml
   return
 
+normalize = (html)->
+  html.toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')
+
+normalizedHtml = ($node)->
+  normalize $node.html()
 
 describe 'Saddle', ->
   describe '#getAttr()', ->
@@ -107,27 +112,27 @@ describe 'Saddle', ->
 
   describe '#getHtml()', ->
     it 'should get HTML', ->
-      expect(saddle.getHtml('$1').toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>1</p>'
+      expect(normalize saddle.getHtml('$1')).to.be '<p>1</p>'
 
 
   describe '#setHtml()', ->
     it 'should set HTML for element', ->
       saddle.setHtml '$1', '<div>123</div>'
       $1 = $ document.getElementById '$1'
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<div>123</div>'
+      expect(normalizedHtml $1).to.be '<div>123</div>'
 
       saddle.setHtml '$1', '<b>321</b>'
       $1 = $ document.getElementById '$1'
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<b>321</b>'
+      expect(normalizedHtml $1).to.be '<b>321</b>'
 
     it 'should set HTML for normal range', ->
       saddle.setHtml '$4', 'test<i></i>'
       $3 = $ document.getElementById '$3'
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4-->test<i></i><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4-->test<i></i><!--$$4-->'
 
       saddle.setHtml '$4', ''
       $3 = $ document.getElementById '$3'
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
 
 
   describe '#prepend()', ->
@@ -135,20 +140,20 @@ describe 'Saddle', ->
       $1 = $ document.getElementById '$1'
 
       saddle.prepend '$1', '<p>0</p>'
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>0</p><p>1</p>'
+      expect(normalizedHtml $1).to.be '<p>0</p><p>1</p>'
 
       saddle.prepend '$1', '<p>-1</p>'
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>-1</p><p>0</p><p>1</p>'
+      expect(normalizedHtml $1).to.be '<p>-1</p><p>0</p><p>1</p>'
 
 
     it 'should append html to normal range', ->
       $3 = $ document.getElementById '$3'
 
       saddle.prepend '$4', '<p>4-0</p>'
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><!--$$4-->'
 
       saddle.prepend '$4', '<p>4--1</p>'
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4--1</p><p>4-0</p><p>3-3</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4--1</p><p>4-0</p><p>3-3</p><!--$$4-->'
 
 
   describe '#append()', ->
@@ -156,20 +161,20 @@ describe 'Saddle', ->
       $1 = $ document.getElementById '$1'
 
       saddle.append '$1', '<p>2</p>'
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>1</p><p>2</p>'
+      expect(normalizedHtml $1).to.be '<p>1</p><p>2</p>'
 
       saddle.append '$1', '<p>3</p>'
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>1</p><p>2</p><p>3</p>'
+      expect(normalizedHtml $1).to.be '<p>1</p><p>2</p><p>3</p>'
 
 
     it 'should append html to normal range', ->
       $3 = $ document.getElementById '$3'
 
       saddle.append '$4', '<p>4-1</p>'
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-1</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-1</p><!--$$4-->'
 
       saddle.append '$4', '<p>4-2</p>'
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-1</p><p>4-2</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-1</p><p>4-2</p><!--$$4-->'
 
 
   describe '#insert()', ->
@@ -177,33 +182,33 @@ describe 'Saddle', ->
       $1 = $ document.getElementById '$1'
 
       saddle.insert '$1', '<p>0</p>', 0
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>0</p><p>1</p>'
+      expect(normalizedHtml $1).to.be '<p>0</p><p>1</p>'
 
       saddle.insert '$1', '<p>2</p>', 2
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>0</p><p>1</p><p>2</p>'
+      expect(normalizedHtml $1).to.be '<p>0</p><p>1</p><p>2</p>'
 
       saddle.insert '$1', '<p>0.5</p>', 1
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>0</p><p>0.5</p><p>1</p><p>2</p>'
+      expect(normalizedHtml $1).to.be '<p>0</p><p>0.5</p><p>1</p><p>2</p>'
 
 
     it 'should insert html to normal range', ->
       $3 = $ document.getElementById '$3'
 
       saddle.insert '$4', '<p>4-0</p>', 0
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><!--$$4-->'
 
       saddle.insert '$4', '<p>4-2</p>', 2
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><p>4-2</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><p>4-2</p><!--$$4-->'
 
 
     it 'should handle range overwlof', ->
       $3 = $ document.getElementById '$3'
 
       saddle.insert '$4', '<p>4-2</p>', 2
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-2</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-2</p><!--$$4-->'
 
       saddle.insert '$4', '<p>4-9</p>', 9
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-2</p><p>4-9</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-2</p><p>4-9</p><!--$$4-->'
 
 
   describe '#remove()', ->
@@ -212,11 +217,11 @@ describe 'Saddle', ->
       $3 = $ document.getElementById '$3'
 
       saddle.remove '$1', 0
-      expect($1.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be ''
+      expect(normalizedHtml $1).to.be ''
 
       saddle.remove '$3', 3
       saddle.remove '$3', 1
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><!--$4--><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><!--$4--><!--$$4-->'
 
 
     it 'should remove items from a normal range', ->
@@ -225,16 +230,16 @@ describe 'Saddle', ->
       saddle.append '$4', '<p>4-4</p>'
       saddle.append '$4', '<p>4-5</p>'
       saddle.append '$4', '<p>4-6</p>'
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-4</p><p>4-5</p><p>4-6</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-4</p><p>4-5</p><p>4-6</p><!--$$4-->'
 
       saddle.remove '$4', 2
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-4</p><p>4-6</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>3-3</p><p>4-4</p><p>4-6</p><!--$$4-->'
 
       saddle.remove '$4', 0
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-4</p><p>4-6</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-4</p><p>4-6</p><!--$$4-->'
 
       saddle.remove '$4', 1
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-4</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-4</p><!--$$4-->'
 
 
   describe '#move()', ->
@@ -243,22 +248,22 @@ describe 'Saddle', ->
       $5 = $ document.getElementById '$5'
 
       saddle.move '$3', 0, 1
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>3-2</p><p>3-1</p><!--$4--><p>3-3</p><!--$$4-->'
+      expect(normalizedHtml $3).to.be '<p>3-2</p><p>3-1</p><!--$4--><p>3-3</p><!--$$4-->'
 
       saddle.move '$3', 0, 4, 2
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<!--$4--><p>3-3</p><!--$$4--><p>3-2</p><p>3-1</p>'
+      expect(normalizedHtml $3).to.be '<!--$4--><p>3-3</p><!--$$4--><p>3-2</p><p>3-1</p>'
 
       saddle.move '$5', 3, 1, 3
-      expect($5.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>5-1</p><p>5-4</p><p>5-5</p><p>5-6</p><p>5-2</p><p>5-3</p><!--$6--><p>5-7</p><p>5-8</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><!--$$6-->'
+      expect(normalizedHtml $5).to.be '<p>5-1</p><p>5-4</p><p>5-5</p><p>5-6</p><p>5-2</p><p>5-3</p><!--$6--><p>5-7</p><p>5-8</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><!--$$6-->'
 
       saddle.move '$5', 7, 0, 6
-      expect($5.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<p>5-7</p><p>5-8</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><p>5-1</p><p>5-4</p><p>5-5</p><p>5-6</p><p>5-2</p><p>5-3</p><!--$6--><!--$$6-->'
+      expect(normalizedHtml $5).to.be '<p>5-7</p><p>5-8</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><p>5-1</p><p>5-4</p><p>5-5</p><p>5-6</p><p>5-2</p><p>5-3</p><!--$6--><!--$$6-->'
 
     it 'should handle move index overflow in div', ->
       $3 = $ document.getElementById '$3'
 
       saddle.move '$3', 0, 1000, 2
-      expect($3.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be '<!--$4--><p>3-3</p><!--$$4--><p>3-1</p><p>3-2</p>'
+      expect(normalizedHtml $3).to.be '<!--$4--><p>3-3</p><!--$$4--><p>3-1</p><p>3-2</p>'
 
 
     it 'should move items from a normal range', ->
@@ -266,16 +271,16 @@ describe 'Saddle', ->
       preHtml = '<p>5-1</p><p>5-2</p><p>5-3</p><p>5-4</p><p>5-5</p><p>5-6</p>'
 
       saddle.move '$6', 0, 1
-      expect($5.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be preHtml + '<!--$6--><p>5-8</p><p>5-7</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><!--$$6-->'
+      expect(normalizedHtml $5).to.be preHtml + '<!--$6--><p>5-8</p><p>5-7</p><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><!--$$6-->'
 
       saddle.move '$6', 1, 2, 2
-      expect($5.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be preHtml + '<!--$6--><p>5-8</p><p>5-10</p><p>5-7</p><p>5-9</p><p>5-11</p><p>5-12</p><!--$$6-->'
+      expect(normalizedHtml $5).to.be preHtml + '<!--$6--><p>5-8</p><p>5-10</p><p>5-7</p><p>5-9</p><p>5-11</p><p>5-12</p><!--$$6-->'
 
       saddle.move '$6', 4, 1, 2
-      expect($5.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be preHtml + '<!--$6--><p>5-8</p><p>5-11</p><p>5-12</p><p>5-10</p><p>5-7</p><p>5-9</p><!--$$6-->'
+      expect(normalizedHtml $5).to.be preHtml + '<!--$6--><p>5-8</p><p>5-11</p><p>5-12</p><p>5-10</p><p>5-7</p><p>5-9</p><!--$$6-->'
 
       saddle.move '$6', 0, 5
-      expect($5.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be preHtml + '<!--$6--><p>5-11</p><p>5-12</p><p>5-10</p><p>5-7</p><p>5-9</p><p>5-8</p><!--$$6-->'
+      expect(normalizedHtml $5).to.be preHtml + '<!--$6--><p>5-11</p><p>5-12</p><p>5-10</p><p>5-7</p><p>5-9</p><p>5-8</p><!--$$6-->'
 
 
     it 'should handle move index overflow in a normal range', ->
@@ -283,5 +288,5 @@ describe 'Saddle', ->
       preHtml = '<p>5-1</p><p>5-2</p><p>5-3</p><p>5-4</p><p>5-5</p><p>5-6</p>'
 
       saddle.move '$6', 0, 1000, 2
-      expect($5.html().toLowerCase().replace(/\r\n/g, '').replace(/<comment id=([^>]*)><\/comment>/g, '<!--$1-->')).to.be preHtml + '<!--$6--><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><p>5-7</p><p>5-8</p><!--$$6-->'
+      expect(normalizedHtml $5).to.be preHtml + '<!--$6--><p>5-9</p><p>5-10</p><p>5-11</p><p>5-12</p><p>5-7</p><p>5-8</p><!--$$6-->'
 
