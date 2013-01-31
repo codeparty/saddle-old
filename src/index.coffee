@@ -84,11 +84,20 @@ class Saddle
 for own methodName of (Item::)
   Saddle::[methodName] = do (methodName = methodName)->
     (id, arg1, arg2, arg3)->
-      @get(id)?[methodName](arg1, arg2, arg3)
+      @get(id) ? [methodName](arg1, arg2, arg3)
+
 
 supportAttributes = doc.createElement('div').getAttribute
 unless supportAttributes
-  Saddle::getAttr = Saddle::getProp
-  Saddle::setAttr = Saddle::setProp
+  Saddle::getAttr = (name)->
+    if name is 'class'
+      name = 'className'
+    @getProp name
+  Saddle::setAttr = (name, val)->
+    if name is 'class'
+      name = 'className'
+    @setProp name, val
+    return
+
 
 module.exports = Saddle
