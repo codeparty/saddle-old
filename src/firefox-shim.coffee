@@ -5,7 +5,6 @@ unless document.body.contains
     !!(@compareDocumentPosition(node) & 16)
 
 
-
 unless document.body.insertAdjacentHTML
   HTMLElement.prototype.insertAdjacentHTML = (position, html) ->
     position = position.toLowerCase()
@@ -21,3 +20,5 @@ unless document.body.insertAdjacentHTML
         parent.insertBefore util.createFragment(parent, html), node.nextSibling
       when 'afterbegin'
         node.insertBefore util.createFragment(node, html), node.firstChild
+
+    return
