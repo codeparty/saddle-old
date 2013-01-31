@@ -79,4 +79,35 @@ class Item
     return
 
 
+
+div = document.createElement 'div'
+div.setAttribute 'class', 't'
+if div.className isnt 't'
+  Item::getAttr = (name)->
+    name = propertyNameFix[name] || name
+    property = @getProp(name)
+    unless property?
+      property = null
+    return property
+
+  Item::setAttr = (name, val)->
+    name = propertyNameFix[name] || name
+    @setProp name, val
+    return
+
+propertyNameFix =
+  tabindex: "tabIndex"
+  readonly: "readOnly"
+  "for": "htmlFor"
+  "class": "className"
+  maxlength: "maxLength"
+  cellspacing: "cellSpacing"
+  cellpadding: "cellPadding"
+  rowspan: "rowSpan"
+  colspan: "colSpan"
+  usemap: "useMap"
+  frameborder: "frameBorder"
+  contenteditable: "contentEditable"
+
+
 module.exports = Item
