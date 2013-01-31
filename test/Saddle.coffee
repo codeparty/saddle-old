@@ -45,6 +45,14 @@ beforeEach ->
     '<input id=$7 value=test>'
     '<input id=$8 type=checkbox checked>'
     '<p id=$9>one <!--$10-->two <!--$$10-->three</p>'
+    '<svg id=$11 height=200 width=200 xmlns=http://www.w3.org/2000/svg>'
+    '' + '<rect id=$12 x=1></rect>'
+    '' + '<circle></circle>'
+    '' + '<!--$13-->'
+    '' + '<rect></rect>'
+    '' + '<circle></circle>'
+    '' + '<!--$$13-->'
+    '</svg>'
   ].join ''
 
   if !document.createTreeWalker
@@ -71,6 +79,10 @@ describe 'Saddle', ->
 
       expect(saddle.getAttr '$8', 'absent').to.be null
 
+    it 'should get svg atrribure', ->
+      expect(saddle.getAttr '$11', 'height').to.be '200'
+      expect(saddle.getAttr '$12', 'x').to.be '1'
+
 
   describe '#setAttr()', ->
     it 'should set attribute', ->
@@ -79,6 +91,13 @@ describe 'Saddle', ->
       expect($2.attr 'class').to.be 'saddle'
       saddle.setAttr '$2', 'name', 'derby'
       expect($2.attr 'name').to.be 'derby'
+
+    it 'should set svg atrribure', ->
+      saddle.setAttr '$11', 'height', 220
+      saddle.setAttr '$12', 'y', 1
+      expect(saddle.getAttr '$11', 'height').to.be '220'
+      expect(saddle.getAttr '$12', 'x').to.be '1'
+      expect(saddle.getAttr '$12', 'y').to.be '1'
 
 
   describe '#getProp()', ->
@@ -126,6 +145,12 @@ describe 'Saddle', ->
       $1 = $ document.getElementById '$1'
       expect(normalizedHtml $1).to.be '<b>321</b>'
 
+    it 'should set HTML for svg element', ->
+      saddle.setHtml '$11', '<circle x=10></circle>'
+      svg11 = document.getElementById '$11'
+      expect(svg11.firstChild.tagName).to.be 'circle'
+      expect(svg11.childNodes.length).to.be 1
+
     it 'should set HTML for normal range', ->
       $3 = $ document.getElementById '$3'
 
@@ -144,9 +169,19 @@ describe 'Saddle', ->
       saddle.setHtml '$10', ''
       expect(normalizedHtml $9).to.be 'one <!--$10--><!--$$10-->three'
 
+    it 'should set HTML for svg element', ->
+      svg11 = document.getElementById '$11'
+
+      saddle.setHtml '$13', '<circle></circle>'
+      expect(svg11.childNodes[3].tagName).to.be 'circle'
+      expect(svg11.childNodes.length).to.be 5
+
+      saddle.setHtml '$13', ''
+      expect(svg11.childNodes.length).to.be 4
+
 
   describe '#prepend()', ->
-    it 'should append html to div', ->
+    it 'should prepend html to div', ->
       $1 = $ document.getElementById '$1'
 
       saddle.prepend '$1', '<p>0</p>'
@@ -156,7 +191,7 @@ describe 'Saddle', ->
       expect(normalizedHtml $1).to.be '<p>-1</p><p>0</p><p>1</p>'
 
 
-    it 'should append html to normal range', ->
+    it 'should prepend html to normal range', ->
       $3 = $ document.getElementById '$3'
 
       saddle.prepend '$4', '<p>4-0</p>'
