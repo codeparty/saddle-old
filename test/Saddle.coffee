@@ -57,7 +57,7 @@ describe 'Saddle', ->
       expect(saddle.getAttr '$7', 'value').to.be 'test'
 
       checked = saddle.getAttr '$8', 'checked'
-      expect(checked is '' or checked is 'checked').to.be.ok()
+      expect(checked is '' or checked is 'checked' or checked is true).to.be.ok()
 
       expect(saddle.getAttr '$8', 'absent').to.be null
 
