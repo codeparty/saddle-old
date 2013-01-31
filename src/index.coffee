@@ -1,5 +1,6 @@
 Item = require './Item'
 ItemRange = require './ItemRange'
+require './dom-shim'
 
 doc = document
 
@@ -84,20 +85,8 @@ class Saddle
 for own methodName of (Item::)
   Saddle::[methodName] = do (methodName = methodName)->
     (id, arg1, arg2, arg3)->
-      @get(id) ? [methodName](arg1, arg2, arg3)
-
-
-supportAttributes = doc.createElement('div').getAttribute
-unless supportAttributes
-  Saddle::getAttr = (name)->
-    if name is 'class'
-      name = 'className'
-    @getProp name
-  Saddle::setAttr = (name, val)->
-    if name is 'class'
-      name = 'className'
-    @setProp name, val
-    return
+      if item = @get(id)
+        item[methodName](arg1, arg2, arg3)
 
 
 module.exports = Saddle
