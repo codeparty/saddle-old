@@ -6,14 +6,14 @@ doc = document
 class Saddle
 #private static methods
   getCachedItem = (id, map)->
-    if (item = map[id]) and doc.contains(item.el || item)
+    if (item = map[id]) and doc.body.contains(item.el || item)
       return item
 
 
   constructor: (options)->
     options ||= {}
     @prefix = options.prefix || '$'
-    @useTags = !!options.useTags
+    @useTags = options.useTags || !doc.createTreeWalker
 
     @itemsMap = {}
     @markersMap = {}
@@ -23,10 +23,15 @@ class Saddle
   _updateMarkers: ->
     @markersMap = markersMap = {}
 
-    # NodeFilter.SHOW_COMMENT == 128
-    commentIterator = doc.createTreeWalker(doc.body, 128, null, false)
-    while comment = commentIterator.nextNode()
-      markersMap[comment.data] = comment
+    if @useTags
+      comments = doc.getElementsByTagName('comment')
+      for comment in comments
+        markersMap[comment.id] = comment
+    else
+      # NodeFilter.SHOW_COMMENT == 128
+      commentIterator = doc.createTreeWalker(doc.body, 128, null, false)
+      while comment = commentIterator.nextNode()
+        markersMap[comment.data] = comment
 
     markersMap
 
@@ -81,5 +86,9 @@ for own methodName of (Item::)
     (id, arg1, arg2, arg3)->
       @get(id)?[methodName](arg1, arg2, arg3)
 
+supportAttributes = doc.createElement('div').getAttribute
+unless supportAttributes
+  Saddle::getAttr = Saddle::getProp
+  Saddle::setAttr = Saddle::setProp
 
 module.exports = Saddle
