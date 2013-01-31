@@ -70,8 +70,3 @@ if window.Range
     document.createRange()
 else
   module.exports = RangeShim
-
-
-if not document.body.contains
-  document.body.contains = (node) ->
-    !!(@compareDocumentPosition(node) & 16)
