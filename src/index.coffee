@@ -7,6 +7,7 @@ doc = document
 class Saddle
 #private static methods
   getCachedItem = (id, map)->
+    # TODO: make sure that we can get items from head
     if (item = map[id]) and doc.body.contains(item.el || item)
       return item
 
