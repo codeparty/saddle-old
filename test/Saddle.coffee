@@ -44,6 +44,7 @@ beforeEach ->
     '</div>'
     '<input id=$7 value=test>'
     '<input id=$8 type=checkbox checked>'
+    '<p id=$9>one <!--$10-->two <!--$$10-->three</p>'
   ].join ''
 
   if !document.createTreeWalker
@@ -126,13 +127,22 @@ describe 'Saddle', ->
       expect(normalizedHtml $1).to.be '<b>321</b>'
 
     it 'should set HTML for normal range', ->
-      saddle.setHtml '$4', 'test<i></i>'
       $3 = $ document.getElementById '$3'
+
+      saddle.setHtml '$4', 'test<i></i>'
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4-->test<i></i><!--$$4-->'
 
       saddle.setHtml '$4', ''
-      $3 = $ document.getElementById '$3'
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
+
+    it 'should set HTML for text range', ->
+      $9 = $ document.getElementById '$9'
+
+      saddle.setHtml '$10', ' 2 '
+      expect(normalizedHtml $9).to.be 'one <!--$10--> 2 <!--$$10-->three'
+
+      saddle.setHtml '$10', ''
+      expect(normalizedHtml $9).to.be 'one <!--$10--><!--$$10-->three'
 
 
   describe '#prepend()', ->
