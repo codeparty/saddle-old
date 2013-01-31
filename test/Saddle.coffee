@@ -3,6 +3,10 @@ Saddle = require '../lib'
 
 saddle = new Saddle
 
+unless testDiv = document.getElementById('saddle-test')
+  document.body.insertAdjacentHTML 'beforeend', '<div id=saddle-test></div>'
+  testDiv = document.getElementById('saddle-test')
+
 beforeEach ->
   saddle.clear()
   testHtml = [
@@ -45,7 +49,7 @@ beforeEach ->
   if !document.createTreeWalker
     testHtml = testHtml.replace /<!--([^-]*)-->/g, '<comment id=$1></comment>'
 
-  document.body.innerHTML = testHtml
+  testDiv.innerHTML = testHtml
   return
 
 
