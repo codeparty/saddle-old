@@ -8,11 +8,14 @@ class ItemRange
   constructor: (@start, @end)->
     @el = start
     @range = util.createRange()
-    @_ranged = false
     @_updateRange()
 
+    parent = start.parentNode
+    svg = parent.ownerSVGElement || parent.tagName is 'svg'
+    @svgRoot = svg && (parent.ownerSVGElement || parent)
+
   _createFrag: (html)->
-    util.createFragment(@el.ownerSVGElement || @range, html)
+    util.createFragment(@svgRoot || @range, html)
 
   _updateRange: ->
     # startOffset and endOffset might be messed
@@ -24,11 +27,12 @@ class ItemRange
 
 
   setHtml: (html)->
-    @_updateRange()
     range = @range
     range.deleteContents()
     fragment =
-    range.insertNode @_createFrag html
+      range.insertNode @_createFrag html
+
+    @_updateRange()
     return
 
 
@@ -38,7 +42,6 @@ class ItemRange
     return
 
   insert: (html, index)->
-    @_updateRange()
     range = @range
 
     # handling range overflow
@@ -46,17 +49,19 @@ class ItemRange
 
     startContainer = range.startContainer
     nodeInsertBefore = startContainer.childNodes[containerIndex]
-    startContainer.insertBefore  @_createFrag(html), nodeInsertBefore
+    startContainer.insertBefore @_createFrag(html), nodeInsertBefore
+
+    @_updateRange()
     return
 
   remove: (index)->
-    @_updateRange()
     range = @range
     util.rmChild range.startContainer, range.startOffset + index
+
+    @_updateRange()
     return
 
   move: (from, to, howMany = 1)->
-    @_updateRange()
     range = @range
     offset = range.startOffset
     endOffset = range.endOffset
@@ -67,6 +72,8 @@ class ItemRange
       indexTo = endOffset
 
     util.move range.startContainer, offset + from, indexTo, howMany
+
+    @_updateRange()
     return
 
 

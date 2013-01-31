@@ -59,7 +59,6 @@ wrapMap =
   tr: [ 3, '<table><tbody><tr>', '</tr></tbody></table>' ]
   colgroup: [ 2, '<table><tbody></tbody><colgroup>', '</colgroup></table>' ]
   map: [ 1, '<map>', '</map>' ]
-  svg: [ 1, '<svg xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink>', '</svg>' ]
   _default: [ 0, '', '' ]
 
 

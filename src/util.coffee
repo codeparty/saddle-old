@@ -30,12 +30,25 @@ module.exports =
     return
 
   createFragment: (rangeOrParent, html)->
-    if rangeOrParent.nodeType
+    if tagName = rangeOrParent.tagName
       range = @createRange()
       range.setStartAfter rangeOrParent
+      if tagName is 'svg'
+        isSVG = true
+        html = svgOpen + html + svgClose
     else
       range = rangeOrParent
 
-    range.createContextualFragment html
+    fragment = range.createContextualFragment html
+
+    if isSVG
+      svgWrap = fragment.firstChild
+      while child = svgWrap.firstChild
+        fragment.insertBefore child, svgWrap
+      fragment.removeChild(svgWrap)
+
+    return fragment
 
 
+svgOpen = '<svg xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink>'
+svgClose = '</svg>'
