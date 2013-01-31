@@ -33,3 +33,26 @@ Run auto testing:
 ```sh
 $ grunt test
 ```
+
+For IE 6 open `test/mocha.ie6.html`
+
+
+### Test status
+IE 6.0: passes: 21
+
+IE 7.0: Executed 21 of 21 SUCCESS
+IE 8.0: Executed 21 of 21 SUCCESS
+IE 9.0: Executed 21 of 21 SUCCESS
+
+Opera 11.50: Executed 21 of 21 SUCCESS
+Opera 12.11: Executed 21 of 21 SUCCESS
+
+Safari 5.1: Executed 21 of 21 SUCCESS
+Safari 6.0: Executed 21 of 21 SUCCESS
+
+Firefox 3.0: Executed 21 of 21 SUCCESS
+Firefox 12.0: Executed 21 of 21 SUCCESS
+Firefox 18.0: Executed 21 of 21 SUCCESS
+
+Chrome 24.0: Executed 21 of 21 SUCCESS
+Chrome 26.0: Executed 21 of 21 SUCCESS
