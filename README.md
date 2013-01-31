@@ -3,24 +3,31 @@ saddle
 
 DOM bindings for Derby
 
-# API draft
-internal API are not listed
+# API
 
 * `clear()`: clear markers, components and event listeners
-* `bind(eventName, id, listener)`:
-* `item(id)`: get item by marker id
-* `marker(name)`: get marker by name
-* `update(el, method, ignore, value, property, index)`: magic box that does dom manipulations
-* `nextUpdate(cb)`: on the next dom update exec callback
-* `_emitUpdate()`: run pending updates from `nextUpdate()`. Subject to remove from API
-* `addComponent(ctx, component)`: add components with its context to the Dom
-
-* `fns`: helper functions. Subject to remove from API
-  * `$forChildren(e, el, next, dom)`: trigger event for element's children
-  * `$forName(e, el, next, dom)`: trigger event for elements with the same name
-
 * `uid()`: get an unique id
-* `getRangeMarker()`: return comment or script tag depending on what browser we are dealing with
+* `getMarkers()`: returns function, that templates <!--comment--> or <comment></comment> tags depending on what browser we are dealing with
+
+* `getAttr(id, name)`: get attribute by element id
+* `setAttr(id, name, val)`: set attribute by element id
+
+* `getProp(id, name)`: get property by element id
+* `setProp(id, name, val)`: set property by element id
+
+* `getHtml(id)`: get inner html by element id
+* `setHtml(id, html)`: set inner html by element/markers id
+
+* `append(id, html)`: append html to element/markers by id
+
+* `prepend(id, html)`: prepend html to element/markers by id
+
+* `insert(id, html, index)`: insert html at index into element/markers by id
+
+* `remove(id, index)`: remove node at index from element/markers by id
+
+* `move(id, from, to, howMany = 1)`: move nodes at index within element/markers by id
+
 
 # Testing
 
@@ -33,8 +40,7 @@ Run auto testing:
 ```sh
 $ grunt test
 ```
-
-For IE 6 open `test/mocha.ie6.html`
+Open local file `test/mocha.ie6.html` in IE 6
 
 
 ### Test status
