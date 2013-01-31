@@ -1,6 +1,6 @@
 Item = require './Item'
 ItemRange = require './ItemRange'
-require './dom-shim'
+require './firefox-shim'
 
 doc = document
 

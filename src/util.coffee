@@ -1,4 +1,4 @@
-RangeImplementation = require './RangeShim'
+RangeImplementation = require './Range-shim'
 doc = document
 
 module.exports =
