@@ -68,7 +68,7 @@ class Saddle
     @prefix + (@_id++).toString(36)
 
 
-  getMarkerTpl: ->
+  getMarkers: ->
     if @useTags
       (id)->
         ["<comment id=#{id}/>", "<comment id=#{@prefix + id}/>"]
