@@ -173,7 +173,6 @@ describe 'Saddle', ->
     it 'should set html for normal range', ->
       $3 = $ document.getElementById '$3'
 
-      debugger
       saddle.setHtml '$4', ' test<i></i>'
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--> test<i></i><!--$$4-->'
 
