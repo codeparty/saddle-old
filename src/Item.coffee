@@ -6,7 +6,7 @@ class Item
 
   constructor: (el)->
     @el = el
-    @svg = svg = !!el.ownerSVGElement || el.tagName is 'svg'
+    @svg = svg = !!el.ownerSVGElement || el.tagName.toLowerCase() is 'svg'
     @svgRoot = if svg
       el.ownerSVGElement || el
     else null

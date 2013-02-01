@@ -11,7 +11,7 @@ class ItemRange
     @_updateRange()
 
     parent = start.parentNode
-    svg = parent.ownerSVGElement || parent.tagName is 'svg'
+    svg = parent.ownerSVGElement || parent.tagName.toLowerCase() is 'svg'
     @svgRoot = svg && (parent.ownerSVGElement || parent)
 
   _createFrag: (html)->

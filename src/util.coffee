@@ -33,7 +33,7 @@ module.exports =
     if tagName = rangeOrParent.tagName
       range = @createRange()
       range.setStartAfter rangeOrParent
-      if tagName is 'svg'
+      if tagName.toLowerCase() is 'svg'
         isSVG = true
         html = svgOpen + html + svgClose
     else
