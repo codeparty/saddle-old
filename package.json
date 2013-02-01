@@ -17,8 +17,7 @@
     "grunt-browserify": "~0.1.2",
     "grunt-testacular": "~0.2.2",
     "grunt-bg-shell": "1.x.x",
-    "expect.js": "~0.2.0",
-    "mocha": "~1.8.1"
+    "expect.js": "~0.2.0"
   },
   "engines": {
     "node": ">=0.8.0"
