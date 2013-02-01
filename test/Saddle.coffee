@@ -140,12 +140,11 @@ describe 'Saddle', ->
 
   describe '#setHtml()', ->
     it 'should set html for element', ->
-      saddle.setHtml '$1', '<div>123</div>'
       $1 = $ document.getElementById '$1'
+      saddle.setHtml '$1', '<div>123</div>'
       expect(normalizedHtml $1).to.be '<div>123</div>'
 
       saddle.setHtml '$1', '<b>321</b>'
-      $1 = $ document.getElementById '$1'
       expect(normalizedHtml $1).to.be '<b>321</b>'
 
     it 'should set html for svg element', ->
@@ -173,8 +172,8 @@ describe 'Saddle', ->
     it 'should set html for normal range', ->
       $3 = $ document.getElementById '$3'
 
-      saddle.setHtml '$4', 'test<i></i>'
-      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4-->test<i></i><!--$$4-->'
+      saddle.setHtml '$4', ' test<i></i>'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--> test<i></i><!--$$4-->'
 
       saddle.setHtml '$4', ''
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><!--$$4-->'
@@ -182,8 +181,8 @@ describe 'Saddle', ->
     it 'should set html for text range', ->
       $9 = $ document.getElementById '$9'
 
-      saddle.setHtml '$10', ' 2 '
-      expect(normalizedHtml $9).to.be 'one <!--$10--> 2 <!--$$10-->three'
+      saddle.setHtml '$10', ' <span>2</span> '
+      expect(normalizedHtml $9).to.be 'one <!--$10--> <span>2</span> <!--$$10-->three'
 
       saddle.setHtml '$10', ''
       expect(normalizedHtml $9).to.be 'one <!--$10--><!--$$10-->three'

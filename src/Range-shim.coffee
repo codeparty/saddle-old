@@ -1,5 +1,24 @@
 util = require './util'
 
+
+WRAP_MAP =
+  select: [ 1, '<select multiple="multiple">', '</select>' ]
+  fieldset: [ 1, '<fieldset>', '</fieldset>' ]
+  table: [ 1, '<table>', '</table>' ]
+  tbody: [ 2, '<table><tbody>', '</tbody></table>' ]
+  tr: [ 3, '<table><tbody><tr>', '</tr></tbody></table>' ]
+  colgroup: [ 2, '<table><tbody></tbody><colgroup>', '</colgroup></table>' ]
+  map: [ 1, '<map>', '</map>' ]
+  _default: [ 0, '', '' ]
+
+
+regex_leadingWhitespase = /^(\s+)/
+test_whitespaceKilled = do ->
+  testDiv = document.createElement 'div'
+  testDiv.innerHTML = ' <i></i>'
+  testDiv.firstChild.nodeType isnt 3
+
+
 class RangeShim
   constructor: ->
     @_start = @_end =
@@ -34,7 +53,7 @@ class RangeShim
 
   createContextualFragment: (html)->
     parent = @startContainer
-    wrap = wrapMap[parent.tagName.toLowerCase()] || wrapMap._default
+    wrap = WRAP_MAP[parent.tagName.toLowerCase()] || WRAP_MAP._default
     depth = wrap[0]
     open = wrap[1]
     close = wrap[2]
@@ -46,18 +65,11 @@ class RangeShim
     fragment.appendChild el
     fragment = util.extractChildren fragment, depth + 1
 
+    if test_whitespaceKilled
+      html.replace regex_leadingWhitespase, (whitespaces)->
+        fragment.insertBefore whitespaces, fragment.firstChild
+
     return fragment
-
-
-wrapMap =
-  select: [ 1, '<select multiple="multiple">', '</select>' ]
-  fieldset: [ 1, '<fieldset>', '</fieldset>' ]
-  table: [ 1, '<table>', '</table>' ]
-  tbody: [ 2, '<table><tbody>', '</tbody></table>' ]
-  tr: [ 3, '<table><tbody><tr>', '</tr></tbody></table>' ]
-  colgroup: [ 2, '<table><tbody></tbody><colgroup>', '</colgroup></table>' ]
-  map: [ 1, '<map>', '</map>' ]
-  _default: [ 0, '', '' ]
 
 
 if window.Range
