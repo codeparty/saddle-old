@@ -8,8 +8,8 @@ class Item
     @el = el
     @svgRoot = util.svgRoot el
 
-  _svgFrag: (html)->
-    util.createFragment @svgRoot, html
+  _createFrag: (html)->
+    util.createFragment(@svgRoot || @el, html)
 
   getAttr: (name)->
     @el.getAttribute name
@@ -46,26 +46,17 @@ class Item
 
 
   append: (html)->
-    el = @el
-
-    if @svgRoot
-      el.appendChild @_svgFrag html
-    else
-      el.insertAdjacentHTML 'beforeend', html
-
+    # insert to the end. `index = undefined` insert before `null`
+    @insert html
     return
 
   insert: (html, index)->
+    # can't use insertAdjustmentHTML anymore. It's not working for text nodes
     el = @el
-    # handling rage overflow
-    before = el.childNodes[index]
-    if before
-      if @svgRoot
-        el.insertBefore @_svgFrag(html), before
-      else
-        before.insertAdjacentHTML 'beforebegin', html
-    else
-      @append html
+    before = (index? and el.childNodes[index]) or null
+    # If before is null, new element is inserted at the end of the list of child nodes
+    # https://developer.mozilla.org/en-US/docs/DOM/Node.insertBefore
+    el.insertBefore @_createFrag(html), before
     return
 
   remove: (index)->

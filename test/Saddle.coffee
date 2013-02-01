@@ -208,7 +208,7 @@ describe 'Saddle', ->
       expect(normalizedHtml $1).to.be ' <p>0</p><p>1</p>'
 
       saddle.prepend '$1', '<p>-1</p>'
-      expect(normalizedHtml $1).to.be '<p>-1</p><p>0</p><p>1</p>'
+      expect(normalizedHtml $1).to.be '<p>-1</p> <p>0</p><p>1</p>'
 
     it 'should prepend html to svg element', ->
       svg11 = document.getElementById '$11'
