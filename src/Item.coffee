@@ -41,6 +41,7 @@ class Item
       @append html
     else
       el.innerHTML = html
+      util.fixWhitespace el, html
     return
 
 

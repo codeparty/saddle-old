@@ -12,13 +12,6 @@ WRAP_MAP =
   _default: [ 0, '', '' ]
 
 
-regex_leadingWhitespase = /^(\s+)/
-test_whitespaceKilled = do ->
-  testDiv = document.createElement 'div'
-  testDiv.innerHTML = ' <i></i>'
-  testDiv.firstChild.nodeType isnt 3
-
-
 class RangeShim
   constructor: ->
     @_start = @_end =
@@ -65,9 +58,7 @@ class RangeShim
     fragment.appendChild el
     fragment = util.extractChildren fragment, depth + 1
 
-    if test_whitespaceKilled
-      html.replace regex_leadingWhitespase, (whitespaces)->
-        fragment.insertBefore whitespaces, fragment.firstChild
+    util.fixWhitespace fragment, html
 
     return fragment
 

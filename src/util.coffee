@@ -3,6 +3,15 @@ doc = document
 SVG_OPEN = '<svg xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink>'
 SVG_CLOSE = '</svg>'
 
+
+regex_leadingWhitespase = /^\s+/
+
+test_killedWhitespace = do ->
+  testDiv = document.createElement 'div'
+  testDiv.innerHTML = ' <i></i>'
+  testDiv.firstChild.nodeType isnt 3
+
+
 module.exports =
   remove: (el, index)->
     if child = el.childNodes[index]
@@ -74,6 +83,11 @@ module.exports =
       fragment = @extractChildren fragment, 1
 
     fragment
+
+  fixWhitespace: (node, html)->
+    if test_killedWhitespace
+      html.replace regex_leadingWhitespase, (whitespaces)->
+        node.insertBefore document.createTextNode(whitespaces), node.firstChild
 
 
 RangeImplementation = require './Range-shim'

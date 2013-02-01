@@ -141,8 +141,9 @@ describe 'Saddle', ->
   describe '#setHtml()', ->
     it 'should set html for element', ->
       $1 = $ document.getElementById '$1'
-      saddle.setHtml '$1', '<div>123</div>'
-      expect(normalizedHtml $1).to.be '<div>123</div>'
+
+      saddle.setHtml '$1', ' <div>123</div>'
+      expect(normalizedHtml $1).to.be ' <div>123</div>'
 
       saddle.setHtml '$1', '<b>321</b>'
       expect(normalizedHtml $1).to.be '<b>321</b>'
@@ -172,6 +173,7 @@ describe 'Saddle', ->
     it 'should set html for normal range', ->
       $3 = $ document.getElementById '$3'
 
+      debugger
       saddle.setHtml '$4', ' test<i></i>'
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--> test<i></i><!--$$4-->'
 
@@ -202,8 +204,8 @@ describe 'Saddle', ->
     it 'should prepend html to div', ->
       $1 = $ document.getElementById '$1'
 
-      saddle.prepend '$1', '<p>0</p>'
-      expect(normalizedHtml $1).to.be '<p>0</p><p>1</p>'
+      saddle.prepend '$1', ' <p>0</p>'
+      expect(normalizedHtml $1).to.be ' <p>0</p><p>1</p>'
 
       saddle.prepend '$1', '<p>-1</p>'
       expect(normalizedHtml $1).to.be '<p>-1</p><p>0</p><p>1</p>'
@@ -235,8 +237,8 @@ describe 'Saddle', ->
       saddle.prepend '$4', '<p>4-0</p>'
       expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4-0</p><p>3-3</p><!--$$4-->'
 
-      saddle.prepend '$4', '<p>4--1</p>'
-      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--><p>4--1</p><p>4-0</p><p>3-3</p><!--$$4-->'
+      saddle.prepend '$4', ' <p>4--1</p>'
+      expect(normalizedHtml $3).to.be '<p>3-1</p><p>3-2</p><!--$4--> <p>4--1</p><p>4-0</p><p>3-3</p><!--$$4-->'
 
     it 'should prepend html to svg range', ->
       svg11 = document.getElementById '$11'
