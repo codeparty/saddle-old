@@ -10,9 +10,7 @@ class ItemRange
     @range = util.createRange()
     @_updateRange()
 
-    parent = start.parentNode
-    svg = parent.ownerSVGElement || parent.tagName.toLowerCase() is 'svg'
-    @svgRoot = svg && (parent.ownerSVGElement || parent)
+    @svgRoot = util.svgRoot start
 
   _createFrag: (html)->
     util.createFragment(@svgRoot || @range, html)
@@ -56,7 +54,7 @@ class ItemRange
 
   remove: (index)->
     range = @range
-    util.rmChild range.startContainer, range.startOffset + index
+    util.remove range.startContainer, range.startOffset + index
 
     @_updateRange()
     return

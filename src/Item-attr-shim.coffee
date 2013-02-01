@@ -10,8 +10,16 @@ module.exports = (Item)->
         attr = el.getAttribute name
       else
         attr = @getProp(name)
-        unless attr
-          attr = null
+
+      if attr?
+        if attr is true
+          attr = name
+        else
+          attr += ''
+      else
+        attr = null
+
+
       return attr
 
     Item::setAttr = (name, val)->

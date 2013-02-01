@@ -1,3 +1,5 @@
+util = require './util'
+
 class RangeShim
   constructor: ->
     @_start = @_end =
@@ -40,13 +42,9 @@ class RangeShim
     el = document.createElement('div')
     el.innerHTML = open + html + close
 
-    while depth--
-      el = el.firstChild
-
     fragment = document.createDocumentFragment()
-
-    while node = el.firstChild
-      fragment.appendChild node
+    fragment.appendChild el
+    fragment = util.extractChildren fragment, depth + 1
 
     return fragment
 

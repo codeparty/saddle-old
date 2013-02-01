@@ -6,10 +6,7 @@ class Item
 
   constructor: (el)->
     @el = el
-    @svg = svg = !!el.ownerSVGElement || el.tagName.toLowerCase() is 'svg'
-    @svgRoot = if svg
-      el.ownerSVGElement || el
-    else null
+    @svgRoot = util.svgRoot el
 
   _svgFrag: (html)->
     util.createFragment @svgRoot, html
@@ -36,7 +33,7 @@ class Item
   setHtml: (html)->
     el = @el
 
-    if @svg
+    if @svgRoot
       el = @el
       children = el.childNodes
       while child = el.firstChild
@@ -50,7 +47,7 @@ class Item
   append: (html)->
     el = @el
 
-    if @svg
+    if @svgRoot
       el.appendChild @_svgFrag html
     else
       el.insertAdjacentHTML 'beforeend', html
@@ -62,7 +59,7 @@ class Item
     # handling rage overflow
     before = el.childNodes[index]
     if before
-      if @svg
+      if @svgRoot
         el.insertBefore @_svgFrag(html), before
       else
         before.insertAdjacentHTML 'beforebegin', html
@@ -71,7 +68,7 @@ class Item
     return
 
   remove: (index)->
-    util.rmChild @el, index
+    util.remove @el, index
     return
 
   move: (from, to, howMany = 1)->

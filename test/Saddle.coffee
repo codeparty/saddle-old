@@ -78,7 +78,7 @@ describe 'Saddle', ->
       expect(saddle.getAttr '$7', 'value').to.be 'test'
 
       checked = saddle.getAttr '$8', 'checked'
-      expect(checked is '' or checked is 'checked' or checked is true).to.be.ok()
+      expect(checked is '' or checked is 'checked').to.be.ok()
 
       expect(saddle.getAttr '$8', 'absent').to.be null
 
@@ -159,7 +159,7 @@ describe 'Saddle', ->
       expect(svg11.firstChild).to.be null
       expect(svg11.childNodes.length).to.be 0
 
-    it 'should set html for svg element', ->
+    it 'should set html for svg child', ->
       svg12 = document.getElementById '$12'
 
       saddle.setHtml '$12', '<circle x=10></circle>'
@@ -358,7 +358,6 @@ describe 'Saddle', ->
 
     it 'should insert html to svg range', ->
       svg11 = document.getElementById '$11'
-
 
       saddle.insert '$13', '<rect></rect>', 1
       expect(normalize svg11.childNodes[4].tagName).to.be 'rect'

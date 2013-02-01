@@ -1,14 +1,14 @@
-RangeImplementation = require './Range-shim'
 doc = document
 
-module.exports =
-  createRange: ->
-    new RangeImplementation
+SVG_OPEN = '<svg xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink>'
+SVG_CLOSE = '</svg>'
 
-  rmChild: (el, index)->
+module.exports =
+  remove: (el, index)->
     if child = el.childNodes[index]
       el.removeChild child
     return
+
 
   move: (el, from, toIndex, howMany = 1)->
     childNodes = el.childNodes
@@ -29,26 +29,51 @@ module.exports =
       el.insertBefore frag, before
     return
 
+
+  extractChildren: (node, depth)->
+    wrap = rootWrap = node.firstChild
+
+    while --depth
+      wrap = rootWrap.firstChild
+
+    while child = wrap.firstChild
+      node.appendChild child
+    node.removeChild(rootWrap)
+
+    node
+
+
+  svgRoot: (el)->
+    while el isnt doc.body
+      if root = el.ownerSVGElement
+        return root
+      tagName = el.tagName
+      if el.tagName and tagName.toLowerCase() is 'svg'
+        return el
+      el = el.parentNode
+    return
+
+
+  createRange: ->
+    new RangeImplementation
+
+
   createFragment: (rangeOrParent, html)->
     if tagName = rangeOrParent.tagName
       range = @createRange()
       range.setStartAfter rangeOrParent
       if tagName.toLowerCase() is 'svg'
         isSVG = true
-        html = svgOpen + html + svgClose
+        html = SVG_OPEN + html + SVG_CLOSE
     else
       range = rangeOrParent
 
     fragment = range.createContextualFragment html
 
     if isSVG
-      svgWrap = fragment.firstChild
-      while child = svgWrap.firstChild
-        fragment.insertBefore child, svgWrap
-      fragment.removeChild(svgWrap)
+      fragment = @extractChildren fragment, 1
 
-    return fragment
+    fragment
 
 
-svgOpen = '<svg xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink>'
-svgClose = '</svg>'
+RangeImplementation = require './Range-shim'
