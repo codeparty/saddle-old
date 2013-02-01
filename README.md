@@ -22,7 +22,7 @@ DOM bindings for Derby
 
 ## Not supporting yet
 * IE 6-7 SVG manipulation
-* IE<9 `<script>` insertion into empty div [see metamorph](https://github.com/tomhuda/metamorph.js/blob/8a6745c6d6f19fcf2279b9ab4bdcc9300fbd37a5/lib/metamorph.js#L18)
+* IE < 9 `<script>` insertion into empty div [see metamorph](https://github.com/tomhuda/metamorph.js/blob/8a6745c6d6f19fcf2279b9ab4bdcc9300fbd37a5/lib/metamorph.js#L18)
 * IE loosing some tags [see meteor](https://github.com/meteor/meteor/blob/4d98d8cb4e5a95e9e98953f44c872c9332a042a3/packages/domutils/domutils.js#L61)
 * IE loosing comments in `<select>` and `<option>` [see meteor](https://github.com/meteor/meteor/blob/4d98d8cb4e5a95e9e98953f44c872c9332a042a3/packages/domutils/domutils.js#L64)
 * IE `<select>` value from attribute [see meteor](https://github.com/meteor/meteor/blob/4d98d8cb4e5a95e9e98953f44c872c9332a042a3/packages/domutils/domutils.js#L66)
