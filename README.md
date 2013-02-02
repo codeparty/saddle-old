@@ -48,7 +48,7 @@ You can find borwser tests in `test/Saddle.coffee`
 ### Test status
 IE 6.0: SVG fails
 
-IE 7.0: SVG fails
+IE 7.0: SVG fails  
 IE 8.0: SUCCESS  
 IE 9.0: SUCCESS  
 
