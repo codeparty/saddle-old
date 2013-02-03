@@ -65,8 +65,5 @@ Firefox 18.0: SUCCESS
 Chrome 24.0: SUCCESS  
 Chrome 26.0: SUCCESS  
 
-Android 4.x Browser: SUCCESS  
-Android 4.x Chrome: SUCCESS  
-
-iOS 6.x Safari: SUCCESS  
-iOS 6.x Chrome: SUCCESS  
+Android: SUCCESS  
+iOS: SUCCESS  
